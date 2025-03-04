@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\DanRose\\repos\\Learning\\ProjectDemo\\ProjectDemoApi\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{122AACDC-97E0-4E49-8801-2821A20A47D7}|ProjectDemoApi.csproj|c:\\users\\danrose\\repos\\learning\\projectdemo\\projectdemoapi\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{122AACDC-97E0-4E49-8801-2821A20A47D7}|ProjectDemoApi.csproj|solutionrelative:controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{122AACDC-97E0-4E49-8801-2821A20A47D7}|ProjectDemoApi.csproj|c:\\users\\danrose\\repos\\learning\\projectdemo\\projectdemoapi\\projectdemoapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{122AACDC-97E0-4E49-8801-2821A20A47D7}|ProjectDemoApi.csproj|solutionrelative:projectdemoapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ProjectDemoApi",
+              "DocumentMoniker": "C:\\Users\\DanRose\\repos\\Learning\\ProjectDemo\\ProjectDemoApi\\ProjectDemoApi.csproj",
+              "RelativeDocumentMoniker": "ProjectDemoApi.csproj",
+              "ToolTip": "C:\\Users\\DanRose\\repos\\Learning\\ProjectDemo\\ProjectDemoApi\\ProjectDemoApi.csproj*",
+              "RelativeToolTip": "ProjectDemoApi.csproj*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-03-04T15:31:02.169Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "WeatherForecastController.cs",
+              "DocumentMoniker": "C:\\Users\\DanRose\\repos\\Learning\\ProjectDemo\\ProjectDemoApi\\Controllers\\WeatherForecastController.cs",
+              "RelativeDocumentMoniker": "Controllers\\WeatherForecastController.cs",
+              "ToolTip": "C:\\Users\\DanRose\\repos\\Learning\\ProjectDemo\\ProjectDemoApi\\Controllers\\WeatherForecastController.cs",
+              "RelativeToolTip": "Controllers\\WeatherForecastController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-04T15:30:43.215Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
