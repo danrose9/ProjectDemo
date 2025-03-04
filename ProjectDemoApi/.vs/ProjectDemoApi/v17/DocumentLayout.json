@@ -38,8 +38,7 @@
               "RelativeToolTip": "appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-03-04T16:13:04.375Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T16:13:04.375Z"
             },
             {
               "$type": "Document",
@@ -64,8 +63,7 @@
               "RelativeToolTip": "Models\\ProjectDemoContext.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAABsAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T15:55:24.429Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T15:55:24.429Z"
             },
             {
               "$type": "Document",
@@ -77,8 +75,7 @@
               "RelativeToolTip": "Controllers\\WeatherForecastController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T15:30:43.215Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T15:30:43.215Z"
             }
           ]
         }
