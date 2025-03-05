@@ -6,11 +6,10 @@ namespace ProjectDemoApi.Models;
 
 public partial class ProjectDemoContext : DbContext
 {
-    private readonly string _connectionString;
 
-    public ProjectDemoContext(string connectionString)
+
+    public ProjectDemoContext()
     {
-        _connectionString = connectionString;
     }
 
     public ProjectDemoContext(DbContextOptions<ProjectDemoContext> options)
@@ -18,13 +17,13 @@ public partial class ProjectDemoContext : DbContext
     {
     }
 
-    public virtual DbSet<Customer> Customers { get; set; }
+    public virtual DbSet<Customer> Customer { get; set; }
 
-    public virtual DbSet<CustomerContact> CustomerContacts { get; set; }
+    public virtual DbSet<Contact> Contact { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
     { 
-        optionsBuilder.UseSqlServer(_connectionString);
+
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -53,7 +52,7 @@ public partial class ProjectDemoContext : DbContext
             entity.Property(e => e.Website).HasMaxLength(255);
         });
 
-        modelBuilder.Entity<CustomerContact>(entity =>
+        modelBuilder.Entity<Contact>(entity =>
         {
             entity.HasKey(e => e.ContactId).HasName("PK__Customer__5C6625BBF30075BB");
 
@@ -68,7 +67,7 @@ public partial class ProjectDemoContext : DbContext
             entity.Property(e => e.LastName).HasMaxLength(50);
             entity.Property(e => e.Phone).HasMaxLength(20);
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerContacts)
+            entity.HasOne(d => d.Customer).WithMany(p => p.Contact)
                 .HasForeignKey(d => d.CustomerId)
                 .HasConstraintName("FK__CustomerC__Custo__3E52440B");
         });

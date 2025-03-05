@@ -29,5 +29,5 @@ public partial class Customer
 
     public bool? IsActive { get; set; }
 
-    public virtual ICollection<CustomerContact> CustomerContacts { get; set; } = new List<CustomerContact>();
+    public virtual ICollection<Contact> Contact { get; set; } = new List<Contact>();
 }
