@@ -1,26 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import LoginButton from './components/LoginButton';
+import { MsalProvider, useMsal } from "@azure/msal-react";
+import { msalInstance } from "./auth/msalConfig";
 
 function App() {
   return (
+    <MsalProvider instance={msalInstance}>
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <p>ProjectDemo</p>
+        <LoginButton />
       </header>
     </div>
+    </MsalProvider>
   );
 }
+
 
 export default App;
