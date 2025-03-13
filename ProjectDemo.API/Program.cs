@@ -22,7 +22,8 @@ var connectionString =
 builder.Services.AddDbContext<ProjectDemoContext>(options =>
     options.UseSqlServer(connectionString));
 
-//builder.Services.AddCustomAuthentication(configuration);
+builder.Services.AddCustomAuthentication(configuration);
+builder.Services.AddCustomAuthorization(configuration);
 
 var app = builder.Build();
 
@@ -35,9 +36,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
-app.MapGet("/signin", () => "User Authenticated Successfully!").RequireAuthorization();
+app.MapGet("/signin", () => "User Authenticated Successfully!").RequireAuthorization("Admin");
 app.Run();
