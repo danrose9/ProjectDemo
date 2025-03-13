@@ -7,7 +7,7 @@ using ProjectDemoApi.Services;
 
 namespace ProjectDemoApi.Controllers
 {
-    [Route("api/authenticate")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize]
     public class AuthController : ControllerBase
@@ -20,15 +20,8 @@ namespace ProjectDemoApi.Controllers
             _authService = authService;
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult<string>> PostAuthenticate(User user)
-        //{
-        //    return await Task.FromResult<ActionResult<string>>(
-        //        _authService.GenerateToken(user));
-        //}
-
         [HttpGet]
-        public IActionResult GetSecureData()
+        public IActionResult GetSuccessTest()
         {
             return Ok(new { message = "You have successfully accessed a protected API!" });
         }
