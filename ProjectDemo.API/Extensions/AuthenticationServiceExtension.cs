@@ -26,7 +26,7 @@ namespace ProjectDemoApi.Extensions
                         ValidIssuer = configuration["JwtSettings:Issuer"],
                         ValidAudience = configuration["JwtSettings:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey
-                            (Encoding.ASCII.GetBytes(configuration["JwtSettings:KeyedService"]!)),
+                            (Encoding.ASCII.GetBytes(configuration["JwtSettings:Key"]!)),
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateLifetime = true,

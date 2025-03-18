@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectDemoApi.Models;
+using ProjectDemoApi.Services;
 
 namespace ProjectDemoApi.Controllers
 {
@@ -22,6 +23,7 @@ namespace ProjectDemoApi.Controllers
         }
 
         // GET: api/Customer
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomer()
         {
@@ -44,6 +46,7 @@ namespace ProjectDemoApi.Controllers
 
         // PUT: api/Customer/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {
@@ -75,6 +78,7 @@ namespace ProjectDemoApi.Controllers
 
         // POST: api/Customer
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
@@ -85,6 +89,7 @@ namespace ProjectDemoApi.Controllers
         }
 
         // DELETE: api/Customer/5
+        [Authorize(Policy = AuthorizationPolicyIdentity.AdminUserPolicyName)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {

@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using ProjectDemoApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectDemoApi.Models;
 
 namespace ProjectDemoApi.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ContactController : ControllerBase
@@ -23,6 +22,7 @@ namespace ProjectDemoApi.Controllers
         }
 
         // GET: api/Contact
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Contact>>> GetContact()
         {
@@ -30,6 +30,7 @@ namespace ProjectDemoApi.Controllers
         }
 
         // GET: api/Contact/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Contact>> GetContact(int id)
         {
@@ -45,6 +46,7 @@ namespace ProjectDemoApi.Controllers
 
         // PUT: api/Contact/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutContact(int id, Contact contact)
         {
@@ -76,6 +78,7 @@ namespace ProjectDemoApi.Controllers
 
         // POST: api/Contact
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Contact>> PostContact(Contact contact)
         {
@@ -86,6 +89,7 @@ namespace ProjectDemoApi.Controllers
         }
 
         // DELETE: api/Contact/5
+        [Authorize(Policy = AuthorizationPolicyIdentity.AdminUserPolicyName)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteContact(int id)
         {

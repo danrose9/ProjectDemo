@@ -1,4 +1,6 @@
-﻿namespace ProjectDemoApi.Extensions
+﻿using ProjectDemoApi.Services;
+
+namespace ProjectDemoApi.Extensions
 {
     public static class AutherizationServiceExtension
     {
@@ -6,7 +8,11 @@
         {
 
             services
-                .AddAuthorization();
+                .AddAuthorization(o =>
+                {
+                    o.AddPolicy(AuthorizationPolicyIdentity.AdminUserPolicyName, p =>
+                    p.RequireClaim(AuthorizationPolicyIdentity.AdminUserClaimName, "true"));
+                });
 
             return services;
         }

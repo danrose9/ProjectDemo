@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectDemoApi.Models;
+using ProjectDemoApi.Services;
 
 namespace ProjectDemoApi.Controllers
 {
@@ -22,6 +23,7 @@ namespace ProjectDemoApi.Controllers
         }
 
         // GET: api/User
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUser()
         {
@@ -29,6 +31,7 @@ namespace ProjectDemoApi.Controllers
         }
 
         // GET: api/User/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(Guid id)
         {
@@ -44,6 +47,7 @@ namespace ProjectDemoApi.Controllers
 
         // PUT: api/User/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(Guid id, User user)
         {
@@ -75,6 +79,7 @@ namespace ProjectDemoApi.Controllers
 
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
@@ -85,6 +90,7 @@ namespace ProjectDemoApi.Controllers
         }
 
         // DELETE: api/User/5
+        [Authorize(Policy = AuthorizationPolicyIdentity.AdminUserPolicyName)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
