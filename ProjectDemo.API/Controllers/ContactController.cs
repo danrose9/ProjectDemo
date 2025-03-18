@@ -10,9 +10,9 @@ using ProjectDemoApi.Models;
 
 namespace ProjectDemoApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ContactController : ControllerBase
     {
         private readonly ProjectDemoContext _context;

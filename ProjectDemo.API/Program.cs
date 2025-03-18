@@ -10,7 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 builder.Services.AddControllers();
-builder.Services.AddTransient<AuthService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCustomSwaggerGen(configuration);
 
@@ -23,7 +22,7 @@ builder.Services.AddDbContext<ProjectDemoContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddCustomAuthentication(configuration);
-builder.Services.AddCustomAuthorization(configuration);
+//builder.Services.AddCustomAuthorization(configuration);
 
 var app = builder.Build();
 
@@ -40,5 +39,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapGet("/signin", () => "User Authenticated Successfully!").RequireAuthorization("Admin");
+
 app.Run();

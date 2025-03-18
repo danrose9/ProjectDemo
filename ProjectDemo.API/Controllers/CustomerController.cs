@@ -12,7 +12,6 @@ namespace ProjectDemoApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class CustomerController : ControllerBase
     {
         private readonly ProjectDemoContext _context;

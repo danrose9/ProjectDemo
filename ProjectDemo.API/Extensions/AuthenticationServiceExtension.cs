@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
-using ProjectDemoApi.Helpers;
 using System.Text;
 
 namespace ProjectDemoApi.Extensions
@@ -12,28 +11,28 @@ namespace ProjectDemoApi.Extensions
         {
 
             services
-                .AddAuthentication(options =>
+                .AddAuthentication(o =>
                 {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    //options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                .AddMicrosoftIdentityWebApi(options =>
+                .AddJwtBearer(options =>
                 {
-                    configuration.Bind("AzureAd", options);
-                    options.TokenValidationParameters.NameClaimType = "name";
-                }, options => configuration.Bind("AzureAd", options));
-
-            //.AddJwtBearer(options =>
-            //{
-            //    options.RequireHttpsMetadata = false;
-            //    options.SaveToken = true;
-            //    options.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AuthSettings.PrivateKey)),
-            //        ValidateIssuer = false,
-            //        ValidateAudience = false,
-            //    };
-            //});
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = configuration["JwtSettings:Issuer"],
+                        ValidAudience = configuration["JwtSettings:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey
+                            (Encoding.ASCII.GetBytes(configuration["JwtSettings:KeyedService"]!)),
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true
+                    };
+                });
 
             return services;
         }
