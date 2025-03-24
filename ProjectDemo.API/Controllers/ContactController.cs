@@ -7,6 +7,7 @@ using ProjectDemoApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectDemoApi.Models;
+using ProjectDemoApi.Attributes;
 
 namespace ProjectDemoApi.Controllers
 {
@@ -89,7 +90,8 @@ namespace ProjectDemoApi.Controllers
         }
 
         // DELETE: api/Contact/5
-        [Authorize(Policy = AuthorizationPolicyIdentity.AdminUserPolicyName)]
+        [Authorize]
+        [RequiresClaim(AuthorizationPolicyIdentity.AdminUserClaimName, "true")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteContact(int id)
         {

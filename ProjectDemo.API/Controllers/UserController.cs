@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProjectDemoApi.Attributes;
 using ProjectDemoApi.Models;
 using ProjectDemoApi.Services;
 
@@ -24,6 +25,7 @@ namespace ProjectDemoApi.Controllers
 
         // GET: api/User
         [Authorize]
+        [RequiresClaim(AuthorizationPolicyIdentity.AdminUserClaimName, "true")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUser()
         {
@@ -90,7 +92,8 @@ namespace ProjectDemoApi.Controllers
         }
 
         // DELETE: api/User/5
-        [Authorize(Policy = AuthorizationPolicyIdentity.AdminUserPolicyName)]
+        [Authorize]
+        [RequiresClaim(AuthorizationPolicyIdentity.AdminUserClaimName, "true")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {

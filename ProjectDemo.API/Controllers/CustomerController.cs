@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProjectDemoApi.Attributes;
 using ProjectDemoApi.Models;
 using ProjectDemoApi.Services;
 
@@ -89,7 +90,8 @@ namespace ProjectDemoApi.Controllers
         }
 
         // DELETE: api/Customer/5
-        [Authorize(Policy = AuthorizationPolicyIdentity.AdminUserPolicyName)]
+        [Authorize]
+        [RequiresClaim(AuthorizationPolicyIdentity.AdminUserClaimName, "true")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
