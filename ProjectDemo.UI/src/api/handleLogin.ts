@@ -1,39 +1,32 @@
 import { useMsal } from "@azure/msal-react";
 
-const callApi = async (accessToken: string): Promise<void> => {
-    try {
-      const response = await fetch("https://localhost:5001/protected-endpoint", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
+export const callApi = async (accessToken: string): Promise<void> => {
+  try {
+      
+      const response = await fetch("https://project-demo-api.azurewebsites.net/admin", {
+          method: "GET",
+          headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+          },
       });
-  
+
+      console.log("Response Status:", response.status);
+      console.log("Response Headers:", response.headers);
+
       if (!response.ok) {
-        throw new Error(`API call failed with status: ${response.status}`);
+          const errorText = await response.text();
+          throw new Error(`API call failed with status ${response.status}: ${errorText}`);
       }
-  
+
       const data = await response.json();
       console.log("API Response:", data);
-    } catch (error) {
+  } catch (error) {
       console.error("API call failed:", error);
-    }
-  };
-  
-  const handleLogin = async (): Promise<void> => {
+  }
+};
 
-    const { instance } = useMsal();
 
-    try {
-      const response = await instance.loginPopup({
-        scopes: ["api://6a49e346-98a2-46dd-bfd8-f0ed999d3eca/api.read"],
-      });
   
-      console.log("Access Token:", response.accessToken);
-      await callApi(response.accessToken);
-    } catch (error) {
-      console.error("Login failed:", error);
-    }
-  };
+
   

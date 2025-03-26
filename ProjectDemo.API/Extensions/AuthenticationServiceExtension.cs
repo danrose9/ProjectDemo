@@ -17,22 +17,23 @@ namespace ProjectDemoApi.Extensions
                     o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                     o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                .AddJwtBearer(options =>
-                {
-                    options.RequireHttpsMetadata = false;
-                    options.SaveToken = true;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidIssuer = configuration["JwtSettings:Issuer"],
-                        ValidAudience = configuration["JwtSettings:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey
-                            (Encoding.ASCII.GetBytes(configuration["JwtSettings:Key"]!)),
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true
-                    };
-                });
+                .AddMicrosoftIdentityWebApi(configuration.GetSection("AzureAd"));
+            //.AddJwtBearer(options =>
+            //{
+            //    options.RequireHttpsMetadata = false;
+            //    options.SaveToken = true;
+            //    options.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidIssuer = configuration["JwtSettings:Issuer"],
+            //        ValidAudience = configuration["JwtSettings:Audience"],
+            //        IssuerSigningKey = new SymmetricSecurityKey
+            //            (Encoding.ASCII.GetBytes(configuration["JwtSettings:Key"]!)),
+            //        ValidateIssuer = true,
+            //        ValidateAudience = true,
+            //        ValidateLifetime = true,
+            //        ValidateIssuerSigningKey = true
+            //    };
+            //});
 
             return services;
         }

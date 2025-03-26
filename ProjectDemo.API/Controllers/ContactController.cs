@@ -7,7 +7,7 @@ using ProjectDemoApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectDemoApi.Models;
-using ProjectDemoApi.Attributes;
+using ProjectDemoApi.Authorization;
 
 namespace ProjectDemoApi.Controllers
 {

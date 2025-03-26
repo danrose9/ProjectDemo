@@ -1,16 +1,32 @@
 
 import {useMsal } from "@azure/msal-react";
+import { callApi } from "../api/handleLogin";
 
 const LoginButton = () => {
     const { instance } = useMsal();
   
-    const handleLogin = () => {
-      instance.loginPopup({
-        scopes: ["openid", "profile", "email", "api://6a49e346-98a2-46dd-bfd8-f0ed999d3eca/api.read"],
-      }).then(response => {
-        console.log("Access Token:", response.accessToken);
-      }).catch(error => console.error(error));
-    };
+    const handleLogin = async (): Promise<void> => {
+  
+      try {
+          const response = await instance.loginPopup({
+              scopes: ["api://8bfb425b-27ce-43b3-97c1-7a0fff23b38c/access_as_user"]
+          });
+  
+          console.log("Token:", response.accessToken);
+
+          const accounts = instance.getAllAccounts();
+
+          console.log("Accounts:", accounts); 
+        if (accounts.length > 0) {
+            instance.setActiveAccount(accounts[0]);  // Set the active account
+        }
+
+          await callApi(response.accessToken);
+      } catch (error) {
+          console.error("Login failed:", error);
+      }
+  };
+
 
     return <button onClick={handleLogin}>Login</button>;
   };

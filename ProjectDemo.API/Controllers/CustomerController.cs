@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ProjectDemoApi.Attributes;
+using ProjectDemoApi.Authorization;
 using ProjectDemoApi.Models;
 using ProjectDemoApi.Services;
 
