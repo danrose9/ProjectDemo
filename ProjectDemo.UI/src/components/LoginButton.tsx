@@ -1,6 +1,6 @@
 
 import {useMsal } from "@azure/msal-react";
-import { callApi } from "../api/handleLogin";
+import { callApi } from "../api/callApi";
 
 const LoginButton = () => {
     const { instance } = useMsal();
