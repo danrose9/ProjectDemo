@@ -12,7 +12,9 @@ const LoginButton = () => {
               scopes: ["api://8bfb425b-27ce-43b3-97c1-7a0fff23b38c/access_as_user"]
           });
   
-          console.log("Token:", response.accessToken);
+          console.log("Access Token:", response.accessToken);
+          console.log("Id Token:", response.idToken);
+          console.log("Response", response);
 
           const accounts = instance.getAllAccounts();
 

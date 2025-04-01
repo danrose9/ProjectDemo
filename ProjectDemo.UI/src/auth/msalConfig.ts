@@ -19,11 +19,15 @@ const msalConfig = {
   },
   cache: {
     cacheLocation: "sessionStorage",
-    storeAuthStateInCookie: false,
+    storeAuthStateInCookie: true,
   },
   system: {	
       loggerOptions: {	
-          loggerCallback: (level: any, message: string, containsPii: boolean) => {	
+          loggerCallback: (
+            level: LogLevel, 
+            message: string, 
+            containsPii: boolean
+        ) => {	
               if (containsPii) {		
                   return;		
               }		
