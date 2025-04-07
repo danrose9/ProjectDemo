@@ -18,22 +18,40 @@ namespace ProjectDemoApi.Extensions
                     o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
                 .AddMicrosoftIdentityWebApi(configuration.GetSection("AzureAd"));
-            //.AddJwtBearer(options =>
-            //{
-            //    options.RequireHttpsMetadata = false;
-            //    options.SaveToken = true;
-            //    options.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidIssuer = configuration["JwtSettings:Issuer"],
-            //        ValidAudience = configuration["JwtSettings:Audience"],
-            //        IssuerSigningKey = new SymmetricSecurityKey
-            //            (Encoding.ASCII.GetBytes(configuration["JwtSettings:Key"]!)),
-            //        ValidateIssuer = true,
-            //        ValidateAudience = true,
-            //        ValidateLifetime = true,
-            //        ValidateIssuerSigningKey = true
-            //    };
-            //});
+
+            services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, o =>
+                {
+                    o.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = $"https://sts.windows.net/{configuration["AzureAd:TenantId"]}/",
+                        ValidateAudience = true,
+                        ValidAudience = configuration["AzureAd:Audience"],
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero,
+                        RequireSignedTokens = true
+                    };
+
+                    o.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = async context =>
+                        {
+                            var claims = context.Principal?.Claims
+                                .Select(c => $"{c.Type}: {c.Value}")
+                                .ToList();
+
+                            Console.WriteLine("Claims received from Azure AD:");
+                            claims?.ForEach(Console.WriteLine);
+
+                            await Task.CompletedTask;
+                        },
+                        OnAuthenticationFailed = context =>
+                        {
+                            Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+                            return Task.CompletedTask;
+                        }
+                    };
+                }); ;
 
             return services;
         }
