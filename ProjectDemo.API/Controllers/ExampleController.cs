@@ -8,9 +8,9 @@ namespace ProjectDemoApi.Controllers
     [ApiController]
     public class ExampleController : ControllerBase
     {
-        private readonly IDependancyInjectionExample _dependancyInjectionExample;
+        private readonly Services.ICustomLogger _dependancyInjectionExample;
 
-        public ExampleController(IDependancyInjectionExample dependancyInjectionExample)
+        public ExampleController(Services.ICustomLogger dependancyInjectionExample)
         {
             _dependancyInjectionExample = dependancyInjectionExample;
         }

@@ -1,6 +1,6 @@
 ﻿namespace ProjectDemoApi.Services
 {
-    public class DependancyInjectionExample : IDependancyInjectionExample
+    public class CustomLogger : ICustomLogger
     {
         public void WriteMessagetoConsole(string message)
         { 

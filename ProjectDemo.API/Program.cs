@@ -6,6 +6,7 @@ using ProjectDemoApi.Swagger;
 using System.Configuration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using ProjectDemoApi.Services;
+using ProjectDemoApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-builder.Services.AddScoped<IDependancyInjectionExample, DependancyInjectionExample>();
+builder.Services.AddScoped<ProjectDemoApi.Services.ICustomLogger, CustomLogger>();
 
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")
@@ -43,6 +44,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<CustomLoggingMiddleware>();
 app.MapControllers();
 
 app.Run();

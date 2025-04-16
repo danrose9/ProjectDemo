@@ -23,7 +23,6 @@ namespace ProjectDemoApi.Controllers
         }
 
         // GET: api/Contact
-        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Contact>>> GetContact()
         {
