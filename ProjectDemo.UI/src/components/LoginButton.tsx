@@ -1,36 +1,56 @@
-
-import {useMsal } from "@azure/msal-react";
-import { callApi } from "../api/callApi";
+import { useMsal } from "@azure/msal-react";
+import Button from '@mui/material/Button';
+import { useAuth } from "../auth/AuthProvider";
+import { useEffect } from "react";
 
 const LoginButton = () => {
     const { instance } = useMsal();
-  
-    const handleLogin = async (): Promise<void> => {
-  
-      try {
-          const response = await instance.loginPopup({
-              scopes: ["api://8bfb425b-27ce-43b3-97c1-7a0fff23b38c/access_as_user"]
-          });
-  
-          console.log("Access Token:", response.accessToken);
-          console.log("Id Token:", response.idToken);
-          console.log("Response", response);
-          
-          const accounts = instance.getAllAccounts();
+    const { isAuthenticated, account } = useAuth();
 
-          console.log("Accounts:", accounts); 
-        if (accounts.length > 0) {
-            instance.setActiveAccount(accounts[0]);  // Set the active account
+    const handleLogin = async () => {
+        try {
+            const loginResponse = await instance.loginPopup({
+                scopes: ["api://8bfb425b-27ce-43b3-97c1-7a0fff23b38cd/access_as_user"]
+            });
+
+            instance.setActiveAccount(loginResponse.account);
+            window.location.reload(); // 👈 simple way to re-trigger useEffect in AuthProvider
+        } catch (error) {
+            console.error("Login failed:", error);
         }
+    };
 
-          await callApi(response.accessToken);
-      } catch (error) {
-          console.error("Login failed:", error);
-      }
-  };
+    const handleLogout = async () => {
+        try {
+            await instance.logoutPopup({
+                account
+            });
 
+            window.location.reload(); // 👈 force AuthProvider to recheck state
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
+    };
 
-    return <button onClick={handleLogin}>Login</button>;
-  };
+    useEffect(() => {
+        if (isAuthenticated) {
+            console.log("User is authenticated:", account);
+        }
+    }, [isAuthenticated, account]);
+
+    return (
+        <div>
+            {isAuthenticated ? (
+                <Button color="primary" variant="outlined" onClick={handleLogout}>
+                    Logout
+                </Button>
+            ) : (
+                <Button color="primary" variant="outlined" onClick={handleLogin}>
+                    Login
+                </Button>
+            )}
+        </div>
+    );
+};
 
 export default LoginButton;
