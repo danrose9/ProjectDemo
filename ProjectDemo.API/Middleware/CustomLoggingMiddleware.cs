@@ -13,7 +13,10 @@ namespace ProjectDemoApi.Middleware
 
         public async Task InvokeAsync(HttpContext context, ICustomLogger customeLogger)
         {
-            customeLogger.WriteMessagetoConsole($"Request to: {context.Request.Path}");
+            var request = context.Request;
+            var response = context.Response;
+            
+            customeLogger.WriteMessagetoConsole($"Request to: [{request.Method}] {request.Path} {response.StatusCode}");
             await _next(context);
         }
     }
