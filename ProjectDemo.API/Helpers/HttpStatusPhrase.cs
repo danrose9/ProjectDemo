@@ -1,8 +1,8 @@
 ﻿namespace ProjectDemoApi.Helpers
 {
-    public class StatusPhrase
+    public class HttpStatusPhrase
     {
-        public static string GetReasonPhrase(int statusCode)
+        public static string GetPhrase(int statusCode)
         {
             return statusCode switch
             {

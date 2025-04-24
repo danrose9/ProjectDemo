@@ -17,7 +17,7 @@ namespace ProjectDemoApi.Middleware
         {
             var request = context.Request;
             var response = context.Response;
-            var reasonPhrase = StatusPhrase.GetReasonPhrase(response.StatusCode);
+            var reasonPhrase = HttpStatusPhrase.GetPhrase(response.StatusCode);
 
             customeLogger.WriteMessagetoConsole($"Request to: [{request.Method}] {request.Path} {response.StatusCode}({reasonPhrase})");
             await _next(context);
