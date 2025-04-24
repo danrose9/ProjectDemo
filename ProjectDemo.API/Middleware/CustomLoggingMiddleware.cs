@@ -1,4 +1,6 @@
-﻿using ProjectDemoApi.Services;
+﻿using Microsoft.AspNetCore.Http;
+using ProjectDemoApi.Helpers;
+using ProjectDemoApi.Services;
 
 namespace ProjectDemoApi.Middleware
 {
@@ -15,8 +17,9 @@ namespace ProjectDemoApi.Middleware
         {
             var request = context.Request;
             var response = context.Response;
-            
-            customeLogger.WriteMessagetoConsole($"Request to: [{request.Method}] {request.Path} {response.StatusCode}");
+            var reasonPhrase = StatusPhrase.GetReasonPhrase(response.StatusCode);
+
+            customeLogger.WriteMessagetoConsole($"Request to: [{request.Method}] {request.Path} {response.StatusCode}({reasonPhrase})");
             await _next(context);
         }
     }
