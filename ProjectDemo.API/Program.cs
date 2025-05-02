@@ -3,7 +3,6 @@ using Microsoft.Extensions.Options;
 using ProjectDemoApi.Extensions;
 using ProjectDemoApi.Models;
 using ProjectDemoApi.Swagger;
-using System.Configuration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using ProjectDemoApi.Services;
 using ProjectDemoApi.Middleware;
