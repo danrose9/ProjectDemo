@@ -16,7 +16,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-builder.Services.AddScoped<ProjectDemoApi.Services.ICustomLogger, CustomLogger>();
 
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")

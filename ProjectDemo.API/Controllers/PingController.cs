@@ -19,9 +19,9 @@ namespace ProjectDemoApi.Controllers
         [HttpGet()]
         public IActionResult Get()
         {
-            _logger.LogInformation("Ping Success");
+            _logger.LogInformation("Ping Success!");
 
-            return Ok(new { message = "Ping Success" });
+            return Ok(new { message = "Ping Success!" });
         }
     }
 }
