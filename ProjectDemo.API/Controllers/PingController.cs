@@ -18,7 +18,7 @@ namespace ProjectDemoApi.Controllers
         [HttpGet()]
         public IActionResult Get()
         {
-            _dependancyInjectionExample.WriteMessagetoConsole("Hello World");
+            _dependancyInjectionExample.WriteMessagetoConsole("Ping");
             return Ok(new { message = "Ping Success" });
         }
     }
