@@ -8,16 +8,19 @@ namespace ProjectDemoApi.Controllers
     [ApiController]
     public class PingController : ControllerBase
     {
-        private readonly Services.ICustomLogger _dependancyInjectionExample;
 
-        public PingController(Services.ICustomLogger dependancyInjectionExample)
+        private readonly ILogger<PingController> _logger;
+
+        public PingController(ILogger<PingController> logger)
         {
-            _dependancyInjectionExample = dependancyInjectionExample;
+            _logger = logger;
         }
 
         [HttpGet()]
         public IActionResult Get()
         {
+            _logger.LogInformation("Ping Success");
+
             return Ok(new { message = "Ping Success" });
         }
     }
