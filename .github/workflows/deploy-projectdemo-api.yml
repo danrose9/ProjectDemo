@@ -28,9 +28,9 @@ jobs:
 
       - name: Publish .NET app
         run: |
-          dotnet restore ./ProjectDemo.Api/ProjectDemo.Api.csproj
-          dotnet build ./ProjectDemo.Api/ProjectDemo.Api.csproj --configuration Release --no-restore
-          dotnet publish ./ProjectDemo.Api/ProjectDemo.Api.csproj --configuration Release --output ./publish
+          dotnet restore ./ProjectDemo.Api/ProjectDemoApi.csproj
+          dotnet build ./ProjectDemo.Api/ProjectDemoApi.csproj --configuration Release --no-restore
+          dotnet publish ./ProjectDemo.Api/ProjectDemoApi.csproj --configuration Release --output ./publish
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
