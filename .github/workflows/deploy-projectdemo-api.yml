@@ -1,4 +1,4 @@
-name: Deploy ProjectDemo.Api to Azure Web App
+name: Deploy ProjectDemo.Api to Azure Web App (via Service Principal)
 
 on:
   push:
@@ -19,20 +19,21 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.x" # Or your target version
+          dotnet-version: "8.0.x"
 
-      - name: Restore dependencies
-        run: dotnet restore ./ProjectDemo.Api/ProjectDemo.Api.csproj
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_API_CREDENTIALS }}
 
-      - name: Build
-        run: dotnet build ./ProjectDemo.Api/ProjectDemo.Api.csproj --configuration Release --no-restore
-
-      - name: Publish
-        run: dotnet publish ./ProjectDemo.Api/ProjectDemo.Api.csproj --configuration Release --output ./publish
+      - name: Publish .NET app
+        run: |
+          dotnet restore ./ProjectDemo.Api/ProjectDemo.Api.csproj
+          dotnet build ./ProjectDemo.Api/ProjectDemo.Api.csproj --configuration Release --no-restore
+          dotnet publish ./ProjectDemo.Api/ProjectDemo.Api.csproj --configuration Release --output ./publish
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: ProjectDemoApi
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ./publish
