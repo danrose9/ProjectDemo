@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - "ProjectDemo.Api/**"
+      - "ProjectDemo.API/**"
       - ".github/workflows/deploy-projectdemo-api.yml"
 
 jobs:
