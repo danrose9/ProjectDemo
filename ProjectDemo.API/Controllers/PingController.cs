@@ -6,11 +6,11 @@ namespace ProjectDemoApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ExampleController : ControllerBase
+    public class PingController : ControllerBase
     {
         private readonly Services.ICustomLogger _dependancyInjectionExample;
 
-        public ExampleController(Services.ICustomLogger dependancyInjectionExample)
+        public PingController(Services.ICustomLogger dependancyInjectionExample)
         {
             _dependancyInjectionExample = dependancyInjectionExample;
         }
@@ -19,7 +19,7 @@ namespace ProjectDemoApi.Controllers
         public IActionResult Get()
         {
             _dependancyInjectionExample.WriteMessagetoConsole("Hello World");
-            return Ok();
+            return Ok(new { message = "Ping Success" });
         }
     }
 }
