@@ -5,7 +5,7 @@ namespace ProjectDemoApi.Extensions
 {
     public static class AutherizationServiceExtension
     {
-        public static IServiceCollection AddCustomAuthorization(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCustomAuthorization(this IServiceCollection services)
         {
 
             services
