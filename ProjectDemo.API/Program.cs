@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectDemoApi.Extensions;
 using ProjectDemoApi.Models;
+using ProjectDemoApi.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,12 @@ builder.Services.AddDbContext<ProjectDemoContext>(options =>
     options.UseSqlServer(connectionString));
 
 var app = builder.Build();
+
+//using (var scope = app.Services.CreateScope())
+//{
+//    var diagnostics = scope.ServiceProvider.GetRequiredService<IStartupDiagnosticsService>();
+//    diagnostics.LogRegisteredServices();
+//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
