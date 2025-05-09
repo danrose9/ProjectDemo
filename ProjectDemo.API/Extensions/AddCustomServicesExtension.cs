@@ -9,9 +9,9 @@ namespace ProjectDemoApi.Extensions
             services.AddTransient<IGuidService, TransientGuidService>()
                 .AddScoped<IGuidService, ScopedGuidService>()
                 .AddSingleton<IGuidService, SingletonGuidService>()
-                .AddTransient<ICustomLogger, CustomLogger>()
-                .AddSingleton(services)
-                .AddSingleton<IStartupDiagnosticsService, StartupDiagnosticsService>();
+                .AddTransient<ICustomLogger, CustomLogger>();
+                //.AddSingleton(services)
+                //.AddSingleton<IStartupDiagnosticsService, StartupDiagnosticsService>();
 
             return services;
         }
