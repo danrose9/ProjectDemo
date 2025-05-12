@@ -11,20 +11,25 @@ namespace ProjectDemoApi.Controllers
 
         private readonly ILogger<PingController> _logger;
         private readonly ICustomLogger _customLogger;
+        private readonly ITimeService _timeService;
 
-        public PingController(ILogger<PingController> logger, ICustomLogger customLogger)
+        public PingController(ILogger<PingController> logger, ICustomLogger customLogger, ITimeService timeService)
         {
             _logger = logger;
             _customLogger = customLogger;
+            _timeService = timeService;
         }
 
         [HttpGet()]
         public IActionResult Get()
         {
-            _logger.LogInformation("Ping Success!");
-            _customLogger.WriteMessagetoConsole("Ping Success!");
+            
+            string pingResult = $"Ping Success at {_timeService.GetFormattedTime()}";
 
-            return Ok(new { message = "Ping Success!" });
+            _logger.LogInformation(pingResult);
+            _customLogger.WriteMessagetoConsole(pingResult);
+
+            return Ok(new { message = pingResult });
         }
     }
 }
