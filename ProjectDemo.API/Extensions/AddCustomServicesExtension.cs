@@ -16,9 +16,6 @@ namespace ProjectDemoApi.Extensions
                     return new TimeService(format);
                 });
 
-            //.AddSingleton(services)
-            //.AddSingleton<IStartupDiagnosticsService, StartupDiagnosticsService>();
-
             return services;
         }
     }

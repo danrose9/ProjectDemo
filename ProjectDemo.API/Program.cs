@@ -27,12 +27,6 @@ builder.Services.AddDbContext<ProjectDemoContext>(options =>
 
 var app = builder.Build();
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var diagnostics = scope.ServiceProvider.GetRequiredService<IStartupDiagnosticsService>();
-//    diagnostics.LogRegisteredServices();
-//}
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
