@@ -1,4 +1,5 @@
-﻿using ProjectDemoApi.Services;
+﻿using ProjectDemoApi.Models;
+using ProjectDemoApi.Services;
 
 namespace ProjectDemoApi.Extensions
 {
@@ -15,17 +16,31 @@ namespace ProjectDemoApi.Extensions
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddCustomServices(this IServiceCollection services)
+        public static IServiceCollection AddCustomServices(
+            this IServiceCollection services, 
+            IConfiguration configuration
+            )
         {
-            services.AddTransient<IGuidService, TransientGuidService>()
+            services
+                .AddTransient<IGuidService, TransientGuidService>()
                 .AddScoped<IGuidService, ScopedGuidService>()
                 .AddSingleton<IGuidService, SingletonGuidService>()
                 .AddTransient<ICustomLogger, CustomLogger>()
-                .AddScoped<ITimeService>(provider =>
+
+                // Add TimeService as a factory
+                .Configure<TimeOptions>(configuration.GetSection("TimeOptions"))
+
+                // Options pattern registration
+                .AddSingleton<ITimeServiceOptionsBased, TimeServiceOptionsBased>()
+
+                // Factory-based registration with custom logic
+                .AddSingleton<ITimeServiceFactoryBased>(provider =>
                 {
-                    var format = "yyyy-MM-dd HH:mm:ss";
-                    return new TimeService(format);
+                    var env = provider.GetRequiredService<IHostEnvironment>();
+                    var format = env.IsDevelopment() ? "HH:mm:ss" : "yyyy-MM-dd HH:mm:ss";
+                    return new TimeServiceFactoryBased(format);
                 });
+
 
             return services;
         }

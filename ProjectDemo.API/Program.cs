@@ -10,11 +10,12 @@ var configuration = builder.Configuration;
 
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer()
+builder.Services
+    .AddEndpointsApiExplorer()
     .AddSwaggerServices()
     .AddCustomAuthentication(configuration)
     .AddCustomAuthorization()
-    .AddCustomServices();
+    .AddCustomServices(configuration);
 
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")

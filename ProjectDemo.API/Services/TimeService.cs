@@ -1,20 +1,38 @@
-﻿namespace ProjectDemoApi.Services
+﻿using Microsoft.Extensions.Options;
+using ProjectDemoApi.Models;
+
+namespace ProjectDemoApi.Services
 {
-    public interface ITimeService
+    // Options pattern version
+    public class TimeServiceOptionsBased : ITimeServiceOptionsBased
     {
-        string GetFormattedTime();
+        private readonly TimeOptions _options;
+
+        public TimeServiceOptionsBased(IOptions<TimeOptions> options)
+        {
+            _options = options.Value;
+        }
+
+        public string GetFormattedTime()
+        {
+            return DateTime.UtcNow.ToString(_options.Format);
+        }
     }
 
-
-    public class TimeService : ITimeService
+    // Factory-based version
+    public class TimeServiceFactoryBased : ITimeServiceFactoryBased
     {
         private readonly string _format;
 
-        public TimeService(string format)
+        public TimeServiceFactoryBased(string format)
         {
             _format = format;
         }
 
-        public string GetFormattedTime() => DateTime.UtcNow.ToString(_format);
+        public string GetFormattedTime()
+        {
+            return DateTime.UtcNow.ToString(_format);
+        }
     }
+
 }
