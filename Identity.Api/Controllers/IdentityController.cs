@@ -15,7 +15,7 @@ namespace Identity.Api.Controllers
     public class IdentityController : ControllerBase
     {
         private const string TokenSecret = "QWxhZGRpbpoisgTjpvcGVuIHNlc2FtZQ==";
-        private static readonly TimeSpan TokenLifetime = TimeSpan.FromHours(1);
+        private static readonly TimeSpan TokenLifetime = TimeSpan.FromHours(8);
 
         [HttpPost("token")]
         public IActionResult GenerateToken(

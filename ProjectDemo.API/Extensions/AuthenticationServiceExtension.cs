@@ -2,6 +2,8 @@
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 
 namespace ProjectDemoApi.Extensions
 {
@@ -9,6 +11,13 @@ namespace ProjectDemoApi.Extensions
     {
         public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
+            var keyVaultUrl = configuration["KeyVault:Url"];
+            //var client = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential());
+            var client = new SecretClient(new Uri("https://projectdemoapi.vault.azure.net/"), new DefaultAzureCredential());
+
+            string jwtAudience = client.GetSecret("JwtAudience").Value.Value;
+            string jwtIssuer = client.GetSecret("JwtIssuer").Value.Value;
+            string jwtSigningKey = client.GetSecret("JwtSigningKey").Value.Value;
 
             services
                 //.AddAuthentication(o =>
@@ -20,15 +29,15 @@ namespace ProjectDemoApi.Extensions
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    var key = Encoding.UTF8.GetBytes("QWxhZGRpbpoisgTjpvcGVuIHNlc2FtZQ==");
+                    var key = Encoding.UTF8.GetBytes(jwtSigningKey);
 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidIssuer = "https://localhost:7209",
+                        ValidateIssuer = false,
+                        ValidIssuer = jwtIssuer,
 
-                        ValidateAudience = true,
-                        ValidAudience = "https://localhost:7200",
+                        ValidateAudience = false,
+                        ValidAudience = jwtAudience,
 
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.Zero,
