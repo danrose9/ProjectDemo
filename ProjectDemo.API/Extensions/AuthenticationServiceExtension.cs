@@ -39,10 +39,10 @@ namespace ProjectDemoApi.Extensions
                         ValidateAudience = false,
                         ValidAudience = jwtAudience,
 
-                        ValidateLifetime = true,
+                        ValidateLifetime = false,
                         ClockSkew = TimeSpan.Zero,
 
-                        ValidateIssuerSigningKey = true,
+                        ValidateIssuerSigningKey = false,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
                     };
 
@@ -88,7 +88,7 @@ namespace ProjectDemoApi.Extensions
 
             //                await Task.CompletedTask;
             //            },
-            //            OnAuthenticationFailed = context =>
+            //            OnAuthenticationFailed = context => 
             //            {
             //                Console.WriteLine($"Authentication failed: {context.Exception.Message}");
             //                return Task.CompletedTask;
