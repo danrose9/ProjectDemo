@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ProjectDemoApi.Extensions
 {
@@ -10,39 +11,38 @@ namespace ProjectDemoApi.Extensions
         {
 
             services
-                .AddAuthentication(o =>
+                //.AddAuthentication(o =>
+                //{
+                //    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                //    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                //    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                //})
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
-                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddMicrosoftIdentityWebApi(configuration.GetSection("AzureAd"));
+                    var key = Encoding.UTF8.GetBytes("QWxhZGRpbpoisgTjpvcGVuIHNlc2FtZQ==");
 
-            services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, o =>
-                {
-                    o.TokenValidationParameters = new TokenValidationParameters
+                    options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = $"https://sts.windows.net/{configuration["AzureAd:TenantId"]}/",
+                        ValidIssuer = "https://localhost:7209",
+
                         ValidateAudience = true,
-                        ValidAudience = configuration["AzureAd:Audience"],
+                        ValidAudience = "https://localhost:7200",
+
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.Zero,
-                        RequireSignedTokens = true
+
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
                     };
 
-                    o.Events = new JwtBearerEvents
+                    options.Events = new JwtBearerEvents
                     {
-                        OnTokenValidated = async context =>
+                        OnTokenValidated = context =>
                         {
-                            var claims = context.Principal?.Claims
-                                .Select(c => $"{c.Type}: {c.Value}")
-                                .ToList();
-
-                            Console.WriteLine("Claims received from Azure AD:");
-                            claims?.ForEach(Console.WriteLine);
-
-                            await Task.CompletedTask;
+                            Console.WriteLine("Token validated.");
+                            return Task.CompletedTask;
                         },
                         OnAuthenticationFailed = context =>
                         {
@@ -50,7 +50,42 @@ namespace ProjectDemoApi.Extensions
                             return Task.CompletedTask;
                         }
                     };
-                }); ;
+                });
+            //.AddMicrosoftIdentityWebApi(configuration.GetSection("AzureAd"));
+
+            //services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, o =>
+            //    {
+            //        o.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            ValidateIssuer = true,
+            //            ValidIssuer = $"https://sts.windows.net/{configuration["AzureAd:TenantId"]}/",
+            //            ValidateAudience = true,
+            //            ValidAudience = configuration["AzureAd:Audience"],
+            //            ValidateLifetime = true,
+            //            ClockSkew = TimeSpan.Zero,
+            //            RequireSignedTokens = true
+            //        };
+
+            //        o.Events = new JwtBearerEvents
+            //        {
+            //            OnTokenValidated = async context =>
+            //            {
+            //                var claims = context.Principal?.Claims
+            //                    .Select(c => $"{c.Type}: {c.Value}")
+            //                    .ToList();
+
+            //                Console.WriteLine("Claims received from Azure AD:");
+            //                claims?.ForEach(Console.WriteLine);
+
+            //                await Task.CompletedTask;
+            //            },
+            //            OnAuthenticationFailed = context =>
+            //            {
+            //                Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+            //                return Task.CompletedTask;
+            //            }
+            //        };
+            //    }); ;
 
             return services;
         }

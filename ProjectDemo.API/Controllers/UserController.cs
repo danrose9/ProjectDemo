@@ -24,7 +24,7 @@ namespace ProjectDemoApi.Controllers
         }
 
         // GET: api/User
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUser()
         {
