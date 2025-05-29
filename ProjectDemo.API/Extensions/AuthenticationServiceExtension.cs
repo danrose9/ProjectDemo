@@ -11,13 +11,17 @@ namespace ProjectDemoApi.Extensions
     {
         public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            var keyVaultUrl = configuration["KeyVault:Url"];
-            //var client = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential());
-            var client = new SecretClient(new Uri("https://projectdemoapi.vault.azure.net/"), new DefaultAzureCredential());
+            //var keyVaultUrl = configuration["KeyVault:Url"];
+            ////var client = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential());
+            //var client = new SecretClient(new Uri("https://projectdemoapi.vault.azure.net/"), new DefaultAzureCredential());
 
-            string jwtAudience = client.GetSecret("JwtAudience").Value.Value;
-            string jwtIssuer = client.GetSecret("JwtIssuer").Value.Value;
-            string jwtSigningKey = client.GetSecret("JwtSigningKey").Value.Value;
+            //string jwtAudience = client.GetSecret("JwtAudience").Value.Value;
+            //string jwtIssuer = client.GetSecret("JwtIssuer").Value.Value;
+            //string jwtSigningKey = client.GetSecret("JwtSigningKey").Value.Value;
+
+            var key = Encoding.UTF8.GetBytes("QWxhZGRpbpoisgTjpvcGVuIHNlc2FtZQ==");
+            string jwtAudience = "https://localhost:7200";
+            string jwtIssuer = "https://localhost:7209";
 
             services
                 //.AddAuthentication(o =>
@@ -29,7 +33,7 @@ namespace ProjectDemoApi.Extensions
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    var key = Encoding.UTF8.GetBytes(jwtSigningKey);
+                    //var key = Encoding.UTF8.GetBytes(jwtSigningKey);
 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -39,10 +43,10 @@ namespace ProjectDemoApi.Extensions
                         ValidateAudience = false,
                         ValidAudience = jwtAudience,
 
-                        ValidateLifetime = false,
+                        ValidateLifetime = true,
                         ClockSkew = TimeSpan.Zero,
 
-                        ValidateIssuerSigningKey = false,
+                        ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
                     };
 
