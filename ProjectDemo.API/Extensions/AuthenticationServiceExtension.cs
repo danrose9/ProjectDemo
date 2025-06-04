@@ -11,29 +11,25 @@ namespace ProjectDemoApi.Extensions
     {
         public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            //var keyVaultUrl = configuration["KeyVault:Url"];
-            ////var client = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential());
-            //var client = new SecretClient(new Uri("https://projectdemoapi.vault.azure.net/"), new DefaultAzureCredential());
+            var keyVaultUrl = configuration["KeyVault:Url"];
 
-            //string jwtAudience = client.GetSecret("JwtAudience").Value.Value;
-            //string jwtIssuer = client.GetSecret("JwtIssuer").Value.Value;
-            //string jwtSigningKey = client.GetSecret("JwtSigningKey").Value.Value;
+            // Fix for CS8604: Ensure keyVaultUrl is not null or empty before creating the Uri object.  
+            if (string.IsNullOrEmpty(keyVaultUrl))
+            {
+                throw new ArgumentNullException(nameof(keyVaultUrl), "KeyVault URL cannot be null or empty.");
+            }
 
-            var key = Encoding.UTF8.GetBytes("QWxhZGRpbpoisgTjpvcGVuIHNlc2FtZQ==");
-            string jwtAudience = "https://localhost:7200";
-            string jwtIssuer = "https://localhost:7209";
+            var client = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential());
+
+            string jwtAudience = client.GetSecret("JwtAudience").Value.Value;
+            string jwtIssuer = client.GetSecret("JwtIssuer").Value.Value;
+            string jwtSigningKey = client.GetSecret("JwtSigningKey").Value.Value;
 
             services
-                //.AddAuthentication(o =>
-                //{
-                //    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                //    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                //    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                //})
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    //var key = Encoding.UTF8.GetBytes(jwtSigningKey);
+                    var key = Encoding.UTF8.GetBytes(jwtSigningKey);
 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -64,41 +60,6 @@ namespace ProjectDemoApi.Extensions
                         }
                     };
                 });
-            //.AddMicrosoftIdentityWebApi(configuration.GetSection("AzureAd"));
-
-            //services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, o =>
-            //    {
-            //        o.TokenValidationParameters = new TokenValidationParameters
-            //        {
-            //            ValidateIssuer = true,
-            //            ValidIssuer = $"https://sts.windows.net/{configuration["AzureAd:TenantId"]}/",
-            //            ValidateAudience = true,
-            //            ValidAudience = configuration["AzureAd:Audience"],
-            //            ValidateLifetime = true,
-            //            ClockSkew = TimeSpan.Zero,
-            //            RequireSignedTokens = true
-            //        };
-
-            //        o.Events = new JwtBearerEvents
-            //        {
-            //            OnTokenValidated = async context =>
-            //            {
-            //                var claims = context.Principal?.Claims
-            //                    .Select(c => $"{c.Type}: {c.Value}")
-            //                    .ToList();
-
-            //                Console.WriteLine("Claims received from Azure AD:");
-            //                claims?.ForEach(Console.WriteLine);
-
-            //                await Task.CompletedTask;
-            //            },
-            //            OnAuthenticationFailed = context => 
-            //            {
-            //                Console.WriteLine($"Authentication failed: {context.Exception.Message}");
-            //                return Task.CompletedTask;
-            //            }
-            //        };
-            //    }); ;
 
             return services;
         }
