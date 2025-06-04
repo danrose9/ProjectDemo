@@ -26,7 +26,8 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7200;http://localhost:5088",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "KeyVault_Url": "https://projectdemo-local.vault.azure.net/"
       }
     },
     "IIS Express": {
