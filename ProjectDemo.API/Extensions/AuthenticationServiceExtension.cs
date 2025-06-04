@@ -33,10 +33,10 @@ namespace ProjectDemoApi.Extensions
 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = false,
+                        ValidateIssuer = true,
                         ValidIssuer = jwtIssuer,
 
-                        ValidateAudience = false,
+                        ValidateAudience = true,
                         ValidAudience = jwtAudience,
 
                         ValidateLifetime = true,
