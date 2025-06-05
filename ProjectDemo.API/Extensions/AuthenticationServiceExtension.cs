@@ -21,6 +21,8 @@ namespace ProjectDemoApi.Extensions
 
             var client = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential());
 
+            Console.WriteLine("keyVaultUrl: {0}", keyVaultUrl);
+
             //string jwtAudience = client.GetSecret("JwtAudience").Value.Value;
             //string jwtIssuer = client.GetSecret("JwtIssuer").Value.Value;
             //string jwtSigningKey = client.GetSecret("JwtSigningKey").Value.Value;
