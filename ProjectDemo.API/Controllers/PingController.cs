@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.ApplicationInsights;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectDemoApi.Models;
 using ProjectDemoApi.Services;
@@ -39,5 +40,13 @@ namespace ProjectDemoApi.Controllers
             });
 
         }
+
+        [HttpGet("test-log")]
+        public IActionResult TestLog([FromServices] TelemetryClient telemetryClient)
+        {
+            telemetryClient.TrackTrace("Manual telemetry test");
+            return Ok("Logged a manual trace.");
+        }
+
     }
 }

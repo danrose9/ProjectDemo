@@ -22,7 +22,6 @@ namespace ProjectDemoApi.Extensions
             )
         {
             services
-                .AddApplicationInsightsTelemetry()
                 .AddTransient<IGuidService, TransientGuidService>()
                 .AddScoped<IGuidService, ScopedGuidService>()
                 .AddSingleton<IGuidService, SingletonGuidService>()

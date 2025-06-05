@@ -10,6 +10,10 @@ var configuration = builder.Configuration;
 
 builder.Services.AddControllers();
 builder.Services
+    .AddApplicationInsightsTelemetry(options =>
+    {
+        options.ConnectionString = configuration["ApplicationInsights:ConnectionString"] ?? string.Empty;
+    })
     .AddEndpointsApiExplorer()
     .AddSwaggerServices()
     .AddCustomAuthentication(configuration)
