@@ -11,18 +11,15 @@ namespace ProjectDemoApi.Controllers
     {
 
         private readonly ILogger<PingController> _logger;
-        private readonly ICustomLogger _customLogger;
         private readonly ITimeServiceOptionsBased _optionsTime;
         private readonly ITimeServiceFactoryBased _factoryTime;
 
         public PingController(
             ILogger<PingController> logger, 
-            ICustomLogger customLogger, 
             ITimeServiceOptionsBased optionsTime,
             ITimeServiceFactoryBased factoryTime)
         {
             _logger = logger;
-            _customLogger = customLogger;
             _optionsTime = optionsTime;
             _factoryTime = factoryTime;
         }
@@ -33,9 +30,8 @@ namespace ProjectDemoApi.Controllers
             
             string pingResult = $"Ping Success at {_optionsTime.GetFormattedTime()}";
 
-            //_logger.LogInformation(pingResult);
-            _customLogger.WriteMessagetoConsole(pingResult);
-
+            _logger.LogInformation(pingResult);
+            
             return Ok(new
             {
                 FromOptions = _optionsTime.GetFormattedTime(),
