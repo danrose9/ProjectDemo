@@ -21,22 +21,27 @@ namespace ProjectDemoApi.Extensions
 
             var client = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential());
 
-            string jwtAudience = client.GetSecret("JwtAudience").Value.Value;
-            string jwtIssuer = client.GetSecret("JwtIssuer").Value.Value;
-            string jwtSigningKey = client.GetSecret("JwtSigningKey").Value.Value;
+            //string jwtAudience = client.GetSecret("JwtAudience").Value.Value;
+            //string jwtIssuer = client.GetSecret("JwtIssuer").Value.Value;
+            //string jwtSigningKey = client.GetSecret("JwtSigningKey").Value.Value;
+
+
+            var key = Encoding.UTF8.GetBytes("QWxhZGRpbpoisgTjpvcGVuIHNlc2FtZQ==");
+            string jwtAudience = "https://localhost:7200";
+            string jwtIssuer = "https://localhost:7209";
 
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    var key = Encoding.UTF8.GetBytes(jwtSigningKey);
+                    //var key = Encoding.UTF8.GetBytes(jwtSigningKey);
 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
+                        ValidateIssuer = false,
                         ValidIssuer = jwtIssuer,
 
-                        ValidateAudience = true,
+                        ValidateAudience = false,
                         ValidAudience = jwtAudience,
 
                         ValidateLifetime = true,
