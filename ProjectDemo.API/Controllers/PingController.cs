@@ -31,10 +31,10 @@ namespace ProjectDemoApi.Controllers
         public IActionResult Get()
         {
             
-            //string pingResult = $"Ping Success at {_timeService.GetFormattedTime()}";
+            string pingResult = $"Ping Success at {_optionsTime.GetFormattedTime()}";
 
             //_logger.LogInformation(pingResult);
-            //_customLogger.WriteMessagetoConsole(pingResult);
+            _customLogger.WriteMessagetoConsole(pingResult);
 
             return Ok(new
             {
