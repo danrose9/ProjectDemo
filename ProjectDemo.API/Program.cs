@@ -17,8 +17,6 @@ builder.Services
     .AddCustomAuthorization()
     .AddCustomServices(configuration);
 
-builder.Logging.AddApplicationInsights();
-
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")
         ?? throw new InvalidOperationException("Connection string"
@@ -41,5 +39,4 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();

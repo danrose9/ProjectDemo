@@ -14,15 +14,18 @@ namespace ProjectDemoApi.Controllers
         private readonly ILogger<PingController> _logger;
         private readonly ITimeServiceOptionsBased _optionsTime;
         private readonly ITimeServiceFactoryBased _factoryTime;
+        private readonly IWebHostEnvironment _env;
 
         public PingController(
             ILogger<PingController> logger, 
             ITimeServiceOptionsBased optionsTime,
-            ITimeServiceFactoryBased factoryTime)
+            ITimeServiceFactoryBased factoryTime,
+            IWebHostEnvironment env)
         {
             _logger = logger;
             _optionsTime = optionsTime;
             _factoryTime = factoryTime;
+            _env = env;
         }
 
         [HttpGet()]
@@ -31,8 +34,14 @@ namespace ProjectDemoApi.Controllers
             
             string pingResult = $"Ping Success at {_optionsTime.GetFormattedTime()}";
 
-            _logger.LogInformation(pingResult);
-            
+            // Information, Debug, Trace not appearing in App Insights
+            _logger.LogInformation("Log Information at {0}", _optionsTime.GetFormattedTime());
+            _logger.LogDebug("Log Debug at {0}", _optionsTime.GetFormattedTime());
+            _logger.LogTrace("Log Trace at {0}", _optionsTime.GetFormattedTime());
+            _logger.LogWarning("Log Warning at {0}", _optionsTime.GetFormattedTime());
+            _logger.LogError("Log Error at {0}", _optionsTime.GetFormattedTime());
+            _logger.LogCritical("Log Critical at {0}", _optionsTime.GetFormattedTime());
+
             return Ok(new
             {
                 FromOptions = _optionsTime.GetFormattedTime(),
@@ -41,11 +50,13 @@ namespace ProjectDemoApi.Controllers
 
         }
 
-        [HttpGet("test-log")]
+        [HttpGet("environment")]
         public IActionResult TestLog([FromServices] TelemetryClient telemetryClient)
         {
-            telemetryClient.TrackTrace("Manual telemetry test");
-            return Ok("Logged a manual trace.");
+            string envName = _env.EnvironmentName;
+            
+            telemetryClient.TrackTrace($"Environment: {envName}");
+            return Ok($"Environment: {envName}");
         }
 
     }
