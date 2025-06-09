@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using ProjectDemoApi.Extensions;
 using ProjectDemoApi.Models;
 using ProjectDemoApi.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
 var configuration = builder.Configuration;
 
 builder.Services.AddControllers();

@@ -4,13 +4,19 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using ProjectDemoApi.Controllers;
 
 namespace ProjectDemoApi.Extensions
 {
     public static class AuthenticationServiceExtension
     {
-        public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
+
+        public static IServiceCollection AddCustomAuthentication(
+            this IServiceCollection services, 
+            IConfiguration configuration
+            )
         {
+            
             var keyVaultUrl = configuration["KeyVault:Url"];
 
             // Fix for CS8604: Ensure keyVaultUrl is not null or empty before creating the Uri object.  
