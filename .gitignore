@@ -18,6 +18,21 @@
 
 # Local .terraform directories
 **/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.pem
+*.key
+*.pub
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
 
 # Mono auto generated files
 mono_crash.*
