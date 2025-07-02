@@ -1,0 +1,29 @@
+name: Export Azure Resources
+on:
+  schedule:
+    - cron: "0 1 * * *" # Every night at 1 AM
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_API_CREDENTIALS }}
+
+      - name: Export Resource Group
+        run: |
+          aztfexport rg RG-ProjectDemo-Dev --output-dir ./terraform/dev --non-interactive
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git commit -m "Nightly export of dev resources" || echo "No changes"
+          git push
