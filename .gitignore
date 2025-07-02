@@ -17,7 +17,7 @@
 *.userprefs
 
 # Local .terraform directories
-**/.terraform/*
+**/.terraform/providers/*
 *.tfstate
 *.tfstate.*
 crash.log
