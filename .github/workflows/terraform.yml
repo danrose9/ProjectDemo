@@ -29,9 +29,12 @@ jobs:
           go install github.com/Azure/aztfexport@latest
           echo "${HOME}/go/bin" >> $GITHUB_PATH
 
+      #   - name: Clean output directory
+      #     run: rm -rf ./terraform/dev && mkdir -p ./terraform/dev
+
       - name: Export Resource Group
         run: |
-          aztfexport rg RG-ProjectDemo-Dev --output-dir ./terraform/dev --non-interactive
+          aztfexport rg RG-ProjectDemo-Dev --output-dir ./terraform/dev --append --non-interactive
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add .
