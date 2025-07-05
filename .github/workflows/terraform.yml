@@ -31,12 +31,11 @@ jobs:
 
       #   - name: Clean output directory
       #     run: rm -rf ./terraform/dev && mkdir -p ./terraform/dev
-
       - name: Export Resource Group
         run: |
-          aztfexport rg RG-ProjectDemo-Dev --output-dir ./terraform/dev --append --non-interactive
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add .
-          git commit -m "Nightly export of dev resources" || echo "No changes"
-          git push
+          aztfexport rg --output-dir ./terraform/dev --append --non-interactive RG-ProjectDemo-Dev
+        #   git config user.name "github-actions"
+        #   git config user.email "github-actions@github.com"
+        #   git add .
+        #   git commit -m "Nightly export of dev resources" || echo "No changes"
+        #   git push

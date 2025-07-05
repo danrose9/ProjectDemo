@@ -439,6 +439,7 @@ Following resources are marked to be skipped:
 - /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-c2a2f372-d73c-426e-985d-aeeb69f56647-EUS/tables/MNFDeviceUpdates
 - /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-c2a2f372-d73c-426e-985d-aeeb69f56647-EUS/tables/MNFSystemSessionHistoryUpdates
 - /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-c2a2f372-d73c-426e-985d-aeeb69f56647-EUS/tables/MNFSystemStateMessageUpdates
+- /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-c2a2f372-d73c-426e-985d-aeeb69f56647-EUS/tables/MPCIngestionLogs
 - /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-c2a2f372-d73c-426e-985d-aeeb69f56647-EUS/tables/MicrosoftAzureBastionAuditLogs
 - /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-c2a2f372-d73c-426e-985d-aeeb69f56647-EUS/tables/MicrosoftDataShareReceivedSnapshotLog
 - /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-c2a2f372-d73c-426e-985d-aeeb69f56647-EUS/tables/MicrosoftDataShareSentSnapshotLog
@@ -622,6 +623,9 @@ Following resources are marked to be skipped:
 - /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.Sql/servers/project-demo-sql-server/databases/master/vulnerabilityAssessments/Default
 - /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.Sql/servers/project-demo-sql-server/keys/ServiceManaged
 - /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.Sql/servers/project-demo-sql-server/sqlVulnerabilityAssessments/Default
+- /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.Storage/storageAccounts/projectdemostorage/blobServices/default
+- /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.Storage/storageAccounts/projectdemostorage/fileServices/default
+- /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.Storage/storageAccounts/projectdemostorage/tableServices/default
 - /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.Web/sites/ProjectDemoApi/DEPLOYMENTS/0a14fa631c65444191fa10bcce046f7a
 - /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.Web/sites/ProjectDemoApi/DEPLOYMENTS/139741a50569456c98a588f16dc95c8c
 - /subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/RG-ProjectDemo-Dev/providers/Microsoft.Web/sites/ProjectDemoApi/DEPLOYMENTS/2f8fe0c4a8d546d19a5c799f372601ad
