@@ -18,8 +18,8 @@ variable "environment" {
     default     = "dev"
     description = "Environment, dev, staging, prod"
 }
-variable "sql_admin_password" {
-  description = "Admin password for MSSQL server"
-  type        = string
-  sensitive   = true
-}
+# variable "sql_admin_password" {
+#   description = "Admin password for MSSQL server"
+#   type        = string
+#   sensitive   = true
+# }

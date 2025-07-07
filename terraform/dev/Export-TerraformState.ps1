@@ -71,6 +71,6 @@ Write-Host "Running aztfexport for resource group: $resourceGroup"
 aztfexport resource-group `
     --non-interactive `
     --output-dir $exportDir `
-    --append `
+    --overwrite `
     --exclude-azure-resource-file .\excluded-resources.txt `
     $resourceGroup
