@@ -5,11 +5,27 @@ $container = "tfstate"
 $blobName = "dev.terraform.tfstate"
 $exportDir = "."
 
-# # Login if needed
-# if (-not (az account show -o none 2 -gt $null)) {
-#     Write-Host "Logging in to Azure..."
-#     az login --use-device-code
-# }
+try {
+    # Get current Azure login details
+    $account = az account show --output json | ConvertFrom-Json
+    $user = $account.user.name
+    $subscription = $account.name
+
+    # Confirmation prompt
+    $message = "You are logged in as '$user' with Subscription '$subscription'. Do you wish to continue? (Y/N): "
+    $response = Read-Host $message
+
+    if ($response -ne 'Y' -and $response -ne 'y') {
+        Write-Host "Operation cancelled by user." -ForegroundColor Yellow
+        exit 1
+    }
+
+    Write-Host "Continuing..." -ForegroundColor Green
+}
+catch {
+    Write-Host "Not logged into Azure CLI. Please run 'az login' and try again." -ForegroundColor Red
+    exit 1
+}
 
 # Get blob properties to extract creation time
 Write-Host "Checking for existing blob: $blobName"
@@ -55,5 +71,6 @@ Write-Host "Running aztfexport for resource group: $resourceGroup"
 aztfexport resource-group `
     --non-interactive `
     --output-dir $exportDir `
-    --overwrite `
+    --append `
+    --exclude-azure-resource-file .\excluded-resources.txt `
     $resourceGroup

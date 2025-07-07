@@ -2,5 +2,3 @@
 (?i)/providers/Microsoft\.KeyVault/vaults/.*/certificates/
 (?i)/providers/Microsoft\.KeyVault/vaults/.*/keys/
 (?i)/providers/Microsoft\.KeyVault/vaults/.*/secrets/
-
-
