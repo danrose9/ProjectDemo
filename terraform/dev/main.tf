@@ -30,6 +30,7 @@ resource "azurerm_mssql_server" "res-640" {
   name                = "project-demo-sql-server"
   resource_group_name = "RG-ProjectDemo-Dev"
   version             = "12.0"
+  administrator_login_password = "administrator_login_password"
   azuread_administrator {
     login_username = "dan@reddog32.com"
     object_id      = "ac63d440-3ec6-4217-8121-c62ca979c3b9"
@@ -85,7 +86,7 @@ resource "azurerm_mssql_server_security_alert_policy" "res-678" {
 }
 resource "azurerm_mssql_server_vulnerability_assessment" "res-680" {
   server_security_alert_policy_id = azurerm_mssql_server_security_alert_policy.res-678.id
-  storage_container_path          = ""
+  storage_container_path          = "var.storage_container_path"
 }
 resource "azurerm_storage_account" "res-681" {
   account_replication_type        = "LRS"
@@ -165,8 +166,8 @@ resource "azurerm_windows_web_app" "res-688" {
   site_config {
     always_on                         = false
     ftps_state                        = "FtpsOnly"
-    ip_restriction_default_action     = ""
-    scm_ip_restriction_default_action = ""
+    ip_restriction_default_action     = "Deny"
+    scm_ip_restriction_default_action = "Deny"
   }
 }
 resource "azurerm_app_service_custom_hostname_binding" "res-702" {

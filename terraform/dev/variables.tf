@@ -18,8 +18,8 @@ variable "environment" {
     default     = "dev"
     description = "Environment, dev, staging, prod"
 }
-# variable "sql_admin_password" {
-#   description = "Admin password for MSSQL server"
-#   type        = string
-#   sensitive   = true
-# }
+variable "storage_container_path" {
+  description = "Admin password for MSSQL server"
+  type        = string
+  default     = "https://projectdemostorage.blob.core.windows.net/tfstate"
+}
