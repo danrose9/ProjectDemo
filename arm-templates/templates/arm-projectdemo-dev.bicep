@@ -6,6 +6,7 @@ param sites_ProjectDemoApi_name string = 'ProjectDemoApi'
 param storageAccounts_projectdemostorage_name string = 'projectdemostorage'
 param vaults_projectdemo_dev_name string = 'projectdemo-dev'
 param vaults_projectdemo_local_name string = 'projectdemo-local'
+param virtualNetworks_vnet_projectdemo_dev_name string = 'vnet-projectdemo-dev'
 
 @secure()
 param vulnerabilityAssessments_Default_storageContainerPath string
@@ -115,6 +116,42 @@ resource vaults_projectdemo_local_name_resource 'Microsoft.KeyVault/vaults@2024-
   }
 }
 
+resource virtualNetworks_vnet_projectdemo_dev_name_resource 'Microsoft.Network/virtualNetworks@2024-05-01' = {
+  location: 'eastus'
+  name: virtualNetworks_vnet_projectdemo_dev_name
+  properties: {
+    addressSpace: {
+      addressPrefixes: [
+        '10.0.0.0/16'
+      ]
+    }
+    enableDdosProtection: false
+    privateEndpointVNetPolicies: 'Disabled'
+    subnets: [
+      {
+        id: virtualNetworks_vnet_projectdemo_dev_name_default.id
+        name: 'default'
+        properties: {
+          addressPrefix: '10.0.0.0/16'
+          delegations: []
+          privateEndpointNetworkPolicies: 'Disabled'
+          privateLinkServiceNetworkPolicies: 'Enabled'
+          serviceEndpoints: [
+            {
+              locations: [
+                '*'
+              ]
+              service: 'Microsoft.Storage.Global'
+            }
+          ]
+        }
+        type: 'Microsoft.Network/virtualNetworks/subnets'
+      }
+    ]
+    virtualNetworkPeerings: []
+  }
+}
+
 resource workspaces_DefaultWorkspace_c2a2f372_d73c_426e_985d_aeeb69f56647_EUS_name_resource 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   location: 'eastus'
   name: workspaces_DefaultWorkspace_c2a2f372_d73c_426e_985d_aeeb69f56647_EUS_name
@@ -154,42 +191,6 @@ resource servers_project_demo_sql_server_name_resource 'Microsoft.Sql/servers@20
     publicNetworkAccess: 'Enabled'
     restrictOutboundNetworkAccess: 'Disabled'
     version: '12.0'
-  }
-}
-
-resource storageAccounts_projectdemostorage_name_resource 'Microsoft.Storage/storageAccounts@2024-01-01' = {
-  kind: 'StorageV2'
-  location: 'eastus2'
-  name: storageAccounts_projectdemostorage_name
-  properties: {
-    accessTier: 'Hot'
-    allowBlobPublicAccess: false
-    allowCrossTenantReplication: false
-    encryption: {
-      keySource: 'Microsoft.Storage'
-      services: {
-        blob: {
-          enabled: true
-          keyType: 'Account'
-        }
-        file: {
-          enabled: true
-          keyType: 'Account'
-        }
-      }
-    }
-    minimumTlsVersion: 'TLS1_0'
-    networkAcls: {
-      bypass: 'AzureServices'
-      defaultAction: 'Allow'
-      ipRules: []
-      virtualNetworkRules: []
-    }
-    supportsHttpsTrafficOnly: true
-  }
-  sku: {
-    name: 'Standard_LRS'
-    tier: 'Standard'
   }
 }
 
@@ -558,6 +559,27 @@ resource vaults_projectdemo_local_name_JwtSigningKey 'Microsoft.KeyVault/vaults/
       enabled: true
     }
   }
+}
+
+resource virtualNetworks_vnet_projectdemo_dev_name_default 'Microsoft.Network/virtualNetworks/subnets@2024-05-01' = {
+  name: '${virtualNetworks_vnet_projectdemo_dev_name}/default'
+  properties: {
+    addressPrefix: '10.0.0.0/16'
+    delegations: []
+    privateEndpointNetworkPolicies: 'Disabled'
+    privateLinkServiceNetworkPolicies: 'Enabled'
+    serviceEndpoints: [
+      {
+        locations: [
+          '*'
+        ]
+        service: 'Microsoft.Storage.Global'
+      }
+    ]
+  }
+  dependsOn: [
+    virtualNetworks_vnet_projectdemo_dev_name_resource
+  ]
 }
 
 resource workspaces_DefaultWorkspace_c2a2f372_d73c_426e_985d_aeeb69f56647_EUS_name_LogManagement_workspaces_DefaultWorkspace_c2a2f372_d73c_426e_985d_aeeb69f56647_EUS_name_General_AlphabeticallySortedComputers 'Microsoft.OperationalInsights/workspaces/savedSearches@2025-02-01' = {
@@ -9601,6 +9623,55 @@ resource Microsoft_Sql_servers_vulnerabilityAssessments_servers_project_demo_sql
   }
 }
 
+resource storageAccounts_projectdemostorage_name_resource 'Microsoft.Storage/storageAccounts@2024-01-01' = {
+  kind: 'StorageV2'
+  location: 'eastus2'
+  name: storageAccounts_projectdemostorage_name
+  properties: {
+    accessTier: 'Hot'
+    allowBlobPublicAccess: false
+    allowCrossTenantReplication: false
+    encryption: {
+      keySource: 'Microsoft.Storage'
+      services: {
+        blob: {
+          enabled: true
+          keyType: 'Account'
+        }
+        file: {
+          enabled: true
+          keyType: 'Account'
+        }
+      }
+    }
+    minimumTlsVersion: 'TLS1_0'
+    networkAcls: {
+      bypass: 'AzureServices'
+      defaultAction: 'Deny'
+      ipRules: [
+        {
+          action: 'Allow'
+          value: '95.166.23.32'
+        }
+      ]
+      resourceAccessRules: []
+      virtualNetworkRules: [
+        {
+          action: 'Allow'
+          id: virtualNetworks_vnet_projectdemo_dev_name_default.id
+          state: 'Succeeded'
+        }
+      ]
+    }
+    publicNetworkAccess: 'Enabled'
+    supportsHttpsTrafficOnly: true
+  }
+  sku: {
+    name: 'Standard_LRS'
+    tier: 'Standard'
+  }
+}
+
 resource storageAccounts_projectdemostorage_name_default 'Microsoft.Storage/storageAccounts/blobServices@2024-01-01' = {
   parent: storageAccounts_projectdemostorage_name_resource
   name: 'default'
@@ -10142,6 +10213,22 @@ resource Microsoft_Sql_servers_databases_vulnerabilityAssessments_servers_projec
   }
   dependsOn: [
     servers_project_demo_sql_server_name_resource
+  ]
+}
+
+resource storageAccounts_projectdemostorage_name_default_armstate 'Microsoft.Storage/storageAccounts/blobServices/containers@2024-01-01' = {
+  parent: storageAccounts_projectdemostorage_name_default
+  name: 'armstate'
+  properties: {
+    defaultEncryptionScope: '$account-encryption-key'
+    denyEncryptionScopeOverride: false
+    immutableStorageWithVersioning: {
+      enabled: true
+    }
+    publicAccess: 'None'
+  }
+  dependsOn: [
+    storageAccounts_projectdemostorage_name_resource
   ]
 }
 
