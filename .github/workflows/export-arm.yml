@@ -1,0 +1,45 @@
+# name: Export ARM Template and Convert to Bicep
+
+# on:
+#   schedule:
+#     - cron: "0 1 * * *" # every day at 1:00 AM UTC
+#   workflow_dispatch: # allows manual triggering
+
+# jobs:
+#   export-arm:
+#     runs-on: windows-latest
+
+#     steps:
+#       - name: Checkout repo
+#         uses: actions/checkout@v4
+
+#       - name: Set up PowerShell
+#         uses: actions/setup-powershell@v2
+#         with:
+#           pwsh-version: "7.4.x"
+
+#       - name: Log in to Azure
+#         uses: azure/login@v1
+#         with:
+#           creds: ${{ secrets.AZURE_STORAGE_CREDENTIALS }}
+
+#       - name: Install Azure CLI Bicep CLI
+#         shell: pwsh
+#         run: |
+#           az config set extension.use_dynamic_install=yes_without_prompt
+#           az bicep install
+
+#       - name: Run export-arm.ps1
+#         shell: pwsh
+#         run: ./arm-templates/scripts/export-arm.ps1
+
+#       # Optional: commit updated Bicep templates back to the repo
+#       - name: Commit and push changes
+#         run: |
+#           git config --global user.name "github-actions[bot]"
+#           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+#           git add arm-templates/templates/*.bicep
+#           git commit -m "Automated Bicep export on schedule" || echo "No changes to commit"
+#           git push
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

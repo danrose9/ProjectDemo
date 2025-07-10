@@ -1,17 +1,48 @@
 param actionGroups_Application_Insights_Smart_Detection_name string = 'Application Insights Smart Detection'
 param components_ProjectDemo_AppInsights_name string = 'ProjectDemo-AppInsights'
+param mongoClusters_mongo_projectdemo_name string = 'mongo-projectdemo'
+param privateDnsZones_privatelink_mongo_cosmos_azure_com_name string = 'privatelink.mongo.cosmos.azure.com'
+param privateDnsZones_privatelink_mongocluster_cosmos_azure_com_name string = 'privatelink.mongocluster.cosmos.azure.com'
 param serverfarms_ASP_ProjectDemo_ca6e_name string = 'ASP-ProjectDemo-ca6e'
 param servers_project_demo_sql_server_name string = 'project-demo-sql-server'
 param sites_ProjectDemoApi_name string = 'ProjectDemoApi'
 param storageAccounts_projectdemostorage_name string = 'projectdemostorage'
 param vaults_projectdemo_dev_name string = 'projectdemo-dev'
 param vaults_projectdemo_local_name string = 'projectdemo-local'
-param virtualNetworks_vnet_projectdemo_dev_name string = 'vnet-projectdemo-dev'
+param virtualNetworks_vnet_projectdemo_name string = 'vnet-projectdemo'
 
 @secure()
 param vulnerabilityAssessments_Default_storageContainerPath string
 param workspaces_DefaultWorkspace_c2a2f372_d73c_426e_985d_aeeb69f56647_EUS_externalid string = '/subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/DefaultResourceGroup-EUS/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-c2a2f372-d73c-426e-985d-aeeb69f56647-EUS'
 param workspaces_DefaultWorkspace_c2a2f372_d73c_426e_985d_aeeb69f56647_EUS_name string = 'DefaultWorkspace-c2a2f372-d73c-426e-985d-aeeb69f56647-EUS'
+
+resource mongoClusters_mongo_projectdemo_name_resource 'Microsoft.DocumentDB/mongoClusters@2024-10-01-preview' = {
+  location: 'switzerlandnorth'
+  name: mongoClusters_mongo_projectdemo_name
+  properties: {
+    administrator: {
+      userName: 'projectdemoadmin'
+    }
+    backup: {}
+    compute: {
+      tier: 'Free'
+    }
+    dataApi: {
+      mode: 'Disabled'
+    }
+    highAvailability: {
+      targetMode: 'Disabled'
+    }
+    publicNetworkAccess: 'Enabled'
+    serverVersion: '8.0'
+    sharding: {
+      shardCount: 1
+    }
+    storage: {
+      sizeGb: 32
+    }
+  }
+}
 
 resource actionGroups_Application_Insights_Smart_Detection_name_resource 'microsoft.insights/actionGroups@2024-10-01-preview' = {
   location: 'Global'
@@ -116,9 +147,21 @@ resource vaults_projectdemo_local_name_resource 'Microsoft.KeyVault/vaults@2024-
   }
 }
 
-resource virtualNetworks_vnet_projectdemo_dev_name_resource 'Microsoft.Network/virtualNetworks@2024-05-01' = {
+resource privateDnsZones_privatelink_mongo_cosmos_azure_com_name_resource 'Microsoft.Network/privateDnsZones@2024-06-01' = {
+  location: 'global'
+  name: privateDnsZones_privatelink_mongo_cosmos_azure_com_name
+  properties: {}
+}
+
+resource privateDnsZones_privatelink_mongocluster_cosmos_azure_com_name_resource 'Microsoft.Network/privateDnsZones@2024-06-01' = {
+  location: 'global'
+  name: privateDnsZones_privatelink_mongocluster_cosmos_azure_com_name
+  properties: {}
+}
+
+resource virtualNetworks_vnet_projectdemo_name_resource 'Microsoft.Network/virtualNetworks@2024-05-01' = {
   location: 'eastus'
-  name: virtualNetworks_vnet_projectdemo_dev_name
+  name: virtualNetworks_vnet_projectdemo_name
   properties: {
     addressSpace: {
       addressPrefixes: [
@@ -126,24 +169,22 @@ resource virtualNetworks_vnet_projectdemo_dev_name_resource 'Microsoft.Network/v
       ]
     }
     enableDdosProtection: false
+    encryption: {
+      enabled: false
+      enforcement: 'AllowUnencrypted'
+    }
     privateEndpointVNetPolicies: 'Disabled'
     subnets: [
       {
-        id: virtualNetworks_vnet_projectdemo_dev_name_default.id
+        id: virtualNetworks_vnet_projectdemo_name_default.id
         name: 'default'
         properties: {
-          addressPrefix: '10.0.0.0/16'
+          addressPrefixes: [
+            '10.0.0.0/24'
+          ]
           delegations: []
           privateEndpointNetworkPolicies: 'Disabled'
           privateLinkServiceNetworkPolicies: 'Enabled'
-          serviceEndpoints: [
-            {
-              locations: [
-                '*'
-              ]
-              service: 'Microsoft.Storage.Global'
-            }
-          ]
         }
         type: 'Microsoft.Network/virtualNetworks/subnets'
       }
@@ -191,6 +232,49 @@ resource servers_project_demo_sql_server_name_resource 'Microsoft.Sql/servers@20
     publicNetworkAccess: 'Enabled'
     restrictOutboundNetworkAccess: 'Disabled'
     version: '12.0'
+  }
+}
+
+resource storageAccounts_projectdemostorage_name_resource 'Microsoft.Storage/storageAccounts@2024-01-01' = {
+  kind: 'StorageV2'
+  location: 'eastus2'
+  name: storageAccounts_projectdemostorage_name
+  properties: {
+    accessTier: 'Hot'
+    allowBlobPublicAccess: false
+    allowCrossTenantReplication: false
+    encryption: {
+      keySource: 'Microsoft.Storage'
+      services: {
+        blob: {
+          enabled: true
+          keyType: 'Account'
+        }
+        file: {
+          enabled: true
+          keyType: 'Account'
+        }
+      }
+    }
+    minimumTlsVersion: 'TLS1_0'
+    networkAcls: {
+      bypass: 'AzureServices'
+      defaultAction: 'Deny'
+      ipRules: [
+        {
+          action: 'Allow'
+          value: '95.166.23.32'
+        }
+      ]
+      resourceAccessRules: []
+      virtualNetworkRules: []
+    }
+    publicNetworkAccess: 'Enabled'
+    supportsHttpsTrafficOnly: true
+  }
+  sku: {
+    name: 'Standard_LRS'
+    tier: 'Standard'
   }
 }
 
@@ -561,24 +645,52 @@ resource vaults_projectdemo_local_name_JwtSigningKey 'Microsoft.KeyVault/vaults/
   }
 }
 
-resource virtualNetworks_vnet_projectdemo_dev_name_default 'Microsoft.Network/virtualNetworks/subnets@2024-05-01' = {
-  name: '${virtualNetworks_vnet_projectdemo_dev_name}/default'
+resource Microsoft_Network_privateDnsZones_SOA_privateDnsZones_privatelink_mongo_cosmos_azure_com_name 'Microsoft.Network/privateDnsZones/SOA@2024-06-01' = {
+  parent: privateDnsZones_privatelink_mongo_cosmos_azure_com_name_resource
+  name: '@'
   properties: {
-    addressPrefix: '10.0.0.0/16'
+    soaRecord: {
+      email: 'azureprivatedns-host.microsoft.com'
+      expireTime: 2419200
+      host: 'azureprivatedns.net'
+      minimumTtl: 10
+      refreshTime: 3600
+      retryTime: 300
+      serialNumber: 1
+    }
+    ttl: 3600
+  }
+}
+
+resource Microsoft_Network_privateDnsZones_SOA_privateDnsZones_privatelink_mongocluster_cosmos_azure_com_name 'Microsoft.Network/privateDnsZones/SOA@2024-06-01' = {
+  parent: privateDnsZones_privatelink_mongocluster_cosmos_azure_com_name_resource
+  name: '@'
+  properties: {
+    soaRecord: {
+      email: 'azureprivatedns-host.microsoft.com'
+      expireTime: 2419200
+      host: 'azureprivatedns.net'
+      minimumTtl: 10
+      refreshTime: 3600
+      retryTime: 300
+      serialNumber: 1
+    }
+    ttl: 3600
+  }
+}
+
+resource virtualNetworks_vnet_projectdemo_name_default 'Microsoft.Network/virtualNetworks/subnets@2024-05-01' = {
+  name: '${virtualNetworks_vnet_projectdemo_name}/default'
+  properties: {
+    addressPrefixes: [
+      '10.0.0.0/24'
+    ]
     delegations: []
     privateEndpointNetworkPolicies: 'Disabled'
     privateLinkServiceNetworkPolicies: 'Enabled'
-    serviceEndpoints: [
-      {
-        locations: [
-          '*'
-        ]
-        service: 'Microsoft.Storage.Global'
-      }
-    ]
   }
   dependsOn: [
-    virtualNetworks_vnet_projectdemo_dev_name_resource
+    virtualNetworks_vnet_projectdemo_name_resource
   ]
 }
 
@@ -9620,55 +9732,6 @@ resource Microsoft_Sql_servers_vulnerabilityAssessments_servers_project_demo_sql
       isEnabled: false
     }
     storageContainerPath: vulnerabilityAssessments_Default_storageContainerPath
-  }
-}
-
-resource storageAccounts_projectdemostorage_name_resource 'Microsoft.Storage/storageAccounts@2024-01-01' = {
-  kind: 'StorageV2'
-  location: 'eastus2'
-  name: storageAccounts_projectdemostorage_name
-  properties: {
-    accessTier: 'Hot'
-    allowBlobPublicAccess: false
-    allowCrossTenantReplication: false
-    encryption: {
-      keySource: 'Microsoft.Storage'
-      services: {
-        blob: {
-          enabled: true
-          keyType: 'Account'
-        }
-        file: {
-          enabled: true
-          keyType: 'Account'
-        }
-      }
-    }
-    minimumTlsVersion: 'TLS1_0'
-    networkAcls: {
-      bypass: 'AzureServices'
-      defaultAction: 'Deny'
-      ipRules: [
-        {
-          action: 'Allow'
-          value: '95.166.23.32'
-        }
-      ]
-      resourceAccessRules: []
-      virtualNetworkRules: [
-        {
-          action: 'Allow'
-          id: virtualNetworks_vnet_projectdemo_dev_name_default.id
-          state: 'Succeeded'
-        }
-      ]
-    }
-    publicNetworkAccess: 'Enabled'
-    supportsHttpsTrafficOnly: true
-  }
-  sku: {
-    name: 'Standard_LRS'
-    tier: 'Standard'
   }
 }
 
