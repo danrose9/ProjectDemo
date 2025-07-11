@@ -1,71 +1,99 @@
-# ================================
-# Filter Bicep File by Excluded Namespaces
-# ================================
+param (
+    [Parameter(Mandatory = $true)]
+    [string]$sourceFile,
 
-# -------- Configuration --------
-$sourceFile = "../templates/arm-projectdemo-dev.bicep"
-$targetFile = "../templates/filtered.bicep"
-$removedFile = "removed-resources.txt"
+    [Parameter(Mandatory = $true)]
+    [string]$targetFile,
 
-# Add as many namespaces as needed here
-$excludedNamespaces = @(
-    "Microsoft.OperationalInsights",
-    "microsoft.insights"  # Example: add more if needed
+    [Parameter(Mandatory = $true)]
+    [string]$removedFile,
+
+    [Parameter(Mandatory = $true)]
+    [string[]]$excludedNamespaces
+
 )
+
+# -------- Process Input --------
+$excludedList = $excludedNamespaces.Split(",") | ForEach-Object { $_.Trim() }
 
 # -------- Load Content --------
 $bicepLines = Get-Content -Path $sourceFile
 
 # -------- State Holders --------
 $insideResourceBlock = $false
-$resourceLines = @()
+$resourceBlock = @()
 $outputLines = @()
 $removedResources = @()
-$currentResource = @()
+$bracketDepth = 0
 
 foreach ($line in $bicepLines) {
-    # Detect start of a resource block
-    if ($line.Trim().StartsWith("resource ")) {
+    $trimmed = $line.Trim()
+
+    if (-not $insideResourceBlock -and $trimmed.StartsWith("resource ")) {
         $insideResourceBlock = $true
-        $currentResource = @($line)
+        $resourceBlock = @($line)
+        $bracketDepth = ($line -split '{').Count - 1 - ($line -split '}').Count + 1
         continue
     }
 
     if ($insideResourceBlock) {
-        $currentResource += $line
+        $resourceBlock += $line
+        $bracketDepth += ($line -split '{').Count - 1
+        $bracketDepth -= ($line -split '}').Count - 1
 
-        # End of resource block
-        if ($line.Trim() -match '^\}') {
+        if ($bracketDepth -le 0) {
             $insideResourceBlock = $false
-            $resourceBlock = $currentResource -join "`n"
+            $fullBlock = $resourceBlock -join "`n"
 
             $isExcluded = $false
-            foreach ($ns in $excludedNamespaces) {
-                if ($resourceBlock -match [regex]::Escape($ns)) {
+            foreach ($ns in $excludedList) {
+                if ($fullBlock -match [regex]::Escape($ns)) {
                     $isExcluded = $true
                     break
                 }
             }
 
             if ($isExcluded) {
-                # Capture the first line (resource definition only) for the report
-                $removedResources += $currentResource[0].Trim()
+                $cleanResourceLine = $resourceBlock[0] -replace '\s*=\s*{.*$', ''
+                $removedResources += $cleanResourceLine.Trim()
             } else {
-                $outputLines += $currentResource
+                $outputLines += $resourceBlock
+                $outputLines += ""  # <- Insert a blank line after each resource
             }
 
-            $currentResource = @()
+            $resourceBlock = @()
+            $bracketDepth = 0
         }
-    }
-    else {
-        # Not inside a resource, just add to output (params etc.)
+    } else {
         $outputLines += $line
     }
 }
 
+# -------- Cleanup: Trim extra blank lines --------
+# Remove leading/trailing blank lines, then compress any extra consecutive blank lines to a single one
+$outputLines = $outputLines `
+    | Where-Object { $_ -ne $null } `
+    | ForEach-Object { $_.TrimEnd() }
+
+# Ensure max one blank line between blocks
+$cleanedLines = @()
+$previousLineBlank = $false
+
+foreach ($line in $outputLines) {
+    if ($line -eq "") {
+        if (-not $previousLineBlank) {
+            $cleanedLines += ""
+            $previousLineBlank = $true
+        }
+    } else {
+        $cleanedLines += $line
+        $previousLineBlank = $false
+    }
+}
+
 # -------- Write Outputs --------
-Set-Content -Path $targetFile -Value $outputLines -Encoding UTF8
+Set-Content -Path $targetFile -Value $cleanedLines -Encoding UTF8
 Set-Content -Path $removedFile -Value $removedResources -Encoding UTF8
 
-Write-Host "✅ Filtered Bicep saved to: $targetFile"
+Write-Host "`n✅ Filtered Bicep saved to: $targetFile"
 Write-Host "🗑️ Removed resource report saved to: $removedFile"
