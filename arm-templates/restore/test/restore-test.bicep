@@ -1,140 +1,137 @@
-﻿param actionGroups_Application_Insights_Smart_Detection_name string = 'Application Insights Smart Detection'
-param components_ProjectDemo_AppInsights_name string = 'ProjectDemo-AppInsights'
-param mongoClusters_mongo_projectdemo_name string = 'mongo-projectdemo'
-param privateDnsZones_privatelink_mongo_cosmos_azure_com_name string = 'privatelink.mongo.cosmos.azure.com'
-param privateDnsZones_privatelink_mongocluster_cosmos_azure_com_name string = 'privatelink.mongocluster.cosmos.azure.com'
-param serverfarms_ASP_ProjectDemo_ca6e_name string = 'ASP-ProjectDemo-ca6e'
-param servers_project_demo_sql_server_name string = 'project-demo-sql-server'
-param sites_ProjectDemoApi_name string = 'ProjectDemoApi'
-param storageAccounts_projectdemostorage_name string = 'projectdemostorage'
-param vaults_projectdemo_dev_name string = 'projectdemo-dev'
-param vaults_projectdemo_local_name string = 'projectdemo-local'
-param virtualNetworks_vnet_projectdemo_name string = 'vnet-projectdemo'
+﻿param storageAccounts_projectdemostorage_name string = 'projectdemostorage'
 
-@secure()
-param vulnerabilityAssessments_Default_storageContainerPath string
-param workspaces_DefaultWorkspace_c2a2f372_d73c_426e_985d_aeeb69f56647_EUS_externalid string = '/subscriptions/c2a2f372-d73c-426e-985d-aeeb69f56647/resourceGroups/DefaultResourceGroup-EUS/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-c2a2f372-d73c-426e-985d-aeeb69f56647-EUS'
-param workspaces_DefaultWorkspace_c2a2f372_d73c_426e_985d_aeeb69f56647_EUS_name string = 'DefaultWorkspace-c2a2f372-d73c-426e-985d-aeeb69f56647-EUS'
-
-resource vaults_projectdemo_dev_name_resource 'Microsoft.KeyVault/vaults@2024-12-01-preview' = {
-  location: 'eastus'
-  name: vaults_projectdemo_dev_name
+resource storageAccounts_projectdemostorage_name_resource 'Microsoft.Storage/storageAccounts@2024-01-01' = {
+  kind: 'StorageV2'
+  location: 'eastus2'
+  name: storageAccounts_projectdemostorage_name
   properties: {
-    accessPolicies: []
-    enableRbacAuthorization: true
-    enableSoftDelete: true
-    enabledForDeployment: false
-    enabledForDiskEncryption: false
-    enabledForTemplateDeployment: false
+    accessTier: 'Hot'
+    allowBlobPublicAccess: false
+    allowCrossTenantReplication: false
+    encryption: {
+      keySource: 'Microsoft.Storage'
+      services: {
+        blob: {
+          enabled: true
+          keyType: 'Account'
+        }
+        file: {
+          enabled: true
+          keyType: 'Account'
+        }
+      }
+    }
+    minimumTlsVersion: 'TLS1_0'
     networkAcls: {
-      bypass: 'None'
-      defaultAction: 'Allow'
-      ipRules: []
+      bypass: 'AzureServices'
+      defaultAction: 'Deny'
+      ipRules: [
+        {
+          action: 'Allow'
+          value: '95.166.23.32'
+        }
+      ]
+      resourceAccessRules: []
       virtualNetworkRules: []
     }
-    provisioningState: 'Succeeded'
     publicNetworkAccess: 'Enabled'
-    sku: {
-      family: 'A'
-      name: 'standard'
-    }
-    softDeleteRetentionInDays: 90
-    tenantId: '73bf9c05-bd27-4332-a610-bb1a50300369'
-    vaultUri: 'https://${vaults_projectdemo_dev_name}.vault.azure.net/'
+    supportsHttpsTrafficOnly: true
+  }
+  sku: {
+    name: 'Standard_LRS'
+    tier: 'Standard'
   }
 }
 
-resource vaults_projectdemo_local_name_resource 'Microsoft.KeyVault/vaults@2024-12-01-preview' = {
-  location: 'eastus'
-  name: vaults_projectdemo_local_name
+resource storageAccounts_projectdemostorage_name_default 'Microsoft.Storage/storageAccounts/blobServices@2024-01-01' = {
+  parent: storageAccounts_projectdemostorage_name_resource
+  name: 'default'
   properties: {
-    accessPolicies: []
-    enableRbacAuthorization: true
-    enableSoftDelete: true
-    enabledForDeployment: false
-    enabledForDiskEncryption: false
-    enabledForTemplateDeployment: false
-    networkAcls: {
-      bypass: 'None'
-      defaultAction: 'Allow'
-      ipRules: []
-      virtualNetworkRules: []
+    cors: {
+      corsRules: []
     }
-    provisioningState: 'Succeeded'
-    publicNetworkAccess: 'Enabled'
-    sku: {
-      family: 'A'
-      name: 'standard'
+    deleteRetentionPolicy: {
+      allowPermanentDelete: false
+      enabled: false
     }
-    softDeleteRetentionInDays: 90
-    tenantId: '73bf9c05-bd27-4332-a610-bb1a50300369'
-    vaultUri: 'https://${vaults_projectdemo_local_name}.vault.azure.net/'
+    isVersioningEnabled: true
+  }
+  sku: {
+    name: 'Standard_LRS'
+    tier: 'Standard'
   }
 }
 
-resource vaults_projectdemo_dev_name_jwtAudience 'Microsoft.KeyVault/vaults/secrets@2024-12-01-preview' = {
-  parent: vaults_projectdemo_dev_name_resource
-  location: 'eastus'
-  name: 'jwtAudience'
+resource Microsoft_Storage_storageAccounts_fileServices_storageAccounts_projectdemostorage_name_default 'Microsoft.Storage/storageAccounts/fileServices@2024-01-01' = {
+  parent: storageAccounts_projectdemostorage_name_resource
+  name: 'default'
   properties: {
-    attributes: {
+    cors: {
+      corsRules: []
+    }
+    protocolSettings: {
+      smb: {}
+    }
+    shareDeleteRetentionPolicy: {
+      days: 7
       enabled: true
     }
   }
+  sku: {
+    name: 'Standard_LRS'
+    tier: 'Standard'
+  }
 }
 
-resource vaults_projectdemo_local_name_JwtAudience 'Microsoft.KeyVault/vaults/secrets@2024-12-01-preview' = {
-  parent: vaults_projectdemo_local_name_resource
-  location: 'eastus'
-  name: 'JwtAudience'
+resource Microsoft_Storage_storageAccounts_queueServices_storageAccounts_projectdemostorage_name_default 'Microsoft.Storage/storageAccounts/queueServices@2024-01-01' = {
+  parent: storageAccounts_projectdemostorage_name_resource
+  name: 'default'
   properties: {
-    attributes: {
-      enabled: true
+    cors: {
+      corsRules: []
     }
   }
 }
 
-resource vaults_projectdemo_dev_name_jwtIssuer 'Microsoft.KeyVault/vaults/secrets@2024-12-01-preview' = {
-  parent: vaults_projectdemo_dev_name_resource
-  location: 'eastus'
-  name: 'jwtIssuer'
+resource Microsoft_Storage_storageAccounts_tableServices_storageAccounts_projectdemostorage_name_default 'Microsoft.Storage/storageAccounts/tableServices@2024-01-01' = {
+  parent: storageAccounts_projectdemostorage_name_resource
+  name: 'default'
   properties: {
-    attributes: {
-      enabled: true
+    cors: {
+      corsRules: []
     }
   }
 }
 
-resource vaults_projectdemo_local_name_JwtIssuer 'Microsoft.KeyVault/vaults/secrets@2024-12-01-preview' = {
-  parent: vaults_projectdemo_local_name_resource
-  location: 'eastus'
-  name: 'JwtIssuer'
+resource storageAccounts_projectdemostorage_name_default_armstate 'Microsoft.Storage/storageAccounts/blobServices/containers@2024-01-01' = {
+  parent: storageAccounts_projectdemostorage_name_default
+  name: 'armstate'
   properties: {
-    attributes: {
+    defaultEncryptionScope: '$account-encryption-key'
+    denyEncryptionScopeOverride: false
+    immutableStorageWithVersioning: {
       enabled: true
     }
+    publicAccess: 'None'
   }
+  dependsOn: [
+    storageAccounts_projectdemostorage_name_resource
+  ]
 }
 
-resource vaults_projectdemo_dev_name_jwtSigningKey 'Microsoft.KeyVault/vaults/secrets@2024-12-01-preview' = {
-  parent: vaults_projectdemo_dev_name_resource
-  location: 'eastus'
-  name: 'jwtSigningKey'
+resource storageAccounts_projectdemostorage_name_default_tfstate 'Microsoft.Storage/storageAccounts/blobServices/containers@2024-01-01' = {
+  parent: storageAccounts_projectdemostorage_name_default
+  name: 'tfstate'
   properties: {
-    attributes: {
-      enabled: true
+    defaultEncryptionScope: '$account-encryption-key'
+    denyEncryptionScopeOverride: false
+    immutableStorageWithVersioning: {
+      enabled: false
     }
+    publicAccess: 'None'
   }
-}
-
-resource vaults_projectdemo_local_name_JwtSigningKey 'Microsoft.KeyVault/vaults/secrets@2024-12-01-preview' = {
-  parent: vaults_projectdemo_local_name_resource
-  location: 'eastus'
-  name: 'JwtSigningKey'
-  properties: {
-    attributes: {
-      enabled: true
-    }
-  }
+  dependsOn: [
+    storageAccounts_projectdemostorage_name_resource
+  ]
 }
 

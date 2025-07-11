@@ -129,5 +129,5 @@ foreach ($line in $outputLines) {
 Set-Content -Path $targetFile -Value $cleanedLines -Encoding UTF8
 Set-Content -Path $removedFile -Value $removedResources -Encoding UTF8
 
-Write-Host "`n✅ Filtered Bicep saved to: $targetFile"
-Write-Host "🗑️ Removed resource report saved to: $removedFile"
+Write-Host "`Filtered Bicep saved to: $targetFile"
+Write-Host "Removed resource report saved to: $removedFile"
